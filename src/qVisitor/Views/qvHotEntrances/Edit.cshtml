@@ -1,0 +1,120 @@
+@model qVisitor.Models.qvHotEntrance
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Изменить страну</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <ol class="breadcrumb">
+        <li>
+            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
+        </li>
+        <li class="active">
+            Изменить страну
+        </li>
+    </ol>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-list-alt"></i>
+                    Изменить название страны
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+
+                    <form asp-action="Edit">
+                        <div class="form-horizontal">
+                            <h4>qvHotEntrance</h4>
+                            <hr />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="Attendant" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Attendant" class="form-control" />
+                                    <span asp-validation-for="Attendant" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Comment" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Comment" class="form-control" />
+                                    <span asp-validation-for="Comment" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DepartmentId" class="control-label col-md-2"></label>
+                                <div class="col-md-10">
+                                    <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DocumentNumber" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="DocumentNumber" class="form-control" />
+                                    <span asp-validation-for="DocumentNumber" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Organization" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Organization" class="form-control" />
+                                    <span asp-validation-for="Organization" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Patronymic" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Patronymic" class="form-control" />
+                                    <span asp-validation-for="Patronymic" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Surname" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Surname" class="form-control" />
+                                    <span asp-validation-for="Surname" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Сохранить" class="btn" />
+                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
+                                        <button type="button" class="btn">Отменить</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.row -->
+                <!-- /.row -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

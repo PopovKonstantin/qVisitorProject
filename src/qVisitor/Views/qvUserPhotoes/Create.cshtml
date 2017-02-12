@@ -1,0 +1,145 @@
+@model qVisitor.Models.qvUserPhoto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Добавить страну</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <ol class="breadcrumb">
+        <li>
+            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
+        </li>
+        <li class="active">
+            Добавить страну
+        </li>
+    </ol>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-list-alt"></i>
+                    Добавить страну
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <form asp-action="Create">
+                        <div class="form-horizontal">
+                            <h4>qvUserPhoto</h4>
+                            <hr />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Photo" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Photo" class="form-control" />
+                                    <span asp-validation-for="Photo" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PhotoDate" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="PhotoDate" class="form-control" />
+                                    <span asp-validation-for="PhotoDate" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Создать" class="btn" />
+                                    <a style="color:#333;" asp-controller="Countries" asp-action="Index">
+                                        <button type="button" class="btn">Отменить</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <!-- /.row -->
+
+</div>
+<!-- /.col-lg-6 -->
+<!-- jQuery -->
+<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="~/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="~/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="~/js/sb-admin-2.js"></script>
+
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+                responsive: true
+        });
+    });
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+
+
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>qvUserPhoto</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Photo" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Photo" class="form-control" />
+                <span asp-validation-for="Photo" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhotoDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PhotoDate" class="form-control" />
+                <span asp-validation-for="PhotoDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
