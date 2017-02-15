@@ -8,68 +8,44 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Удалить страну</h1>
+            <h1 class="page-header">Удалить филиал</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Index"> Компания</a>
-        </li>
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="@Model.CompanyId"> Филиалы </a>
-        </li>
-        <li class="active">
-            Удалить компанию
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="@Model.CompanyId" class="btn btn-default"> Филиалы </a>
+        <a href="#" class="btn btn-default"> Удалить филиал</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Удалить компанию
+                    Удалить филиал
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>Вы действительно хотите удалить запись?</h3>
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                                Название старшего филиала
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.HighBranchId)
-                            </dd>
-                            <dt>
-                                Название филиала
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                        </dl>
-
-                        <form asp-action="Delete">
-                            <div class="form-actions no-color">
-                                <input type="submit" value="Удалить" class="btn" />
-                                <a style="color:#333;" asp-controller="qvCompanies" asp-action="Details" asp-route-id="@Model.CompanyId">
-                                    <button type="button" class="btn">Отменить</button>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.table-responsive -->
+                    <h4>Вы действительно хотите удалить филиал @Html.DisplayFor(model => model.Name) из списка филиалов?</h4>
+                    <div style="padding-bottom:10px;"></div>
+                    <form asp-action="Delete">
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Удалить" class="btn" />
+                            <a style="color:#333;" asp-controller="qvCompanies" asp-action="Details" asp-route-id="@Model.CompanyId">
+                                <button type="button" class="btn">Отменить</button>
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.table-responsive -->
             </div>
-            <!-- /.panel -->
+            <!-- /.panel-body -->
         </div>
-        <!-- /.col-lg-12 -->
+        <!-- /.panel -->
     </div>
-    <!-- /.row -->
-    <!-- /.row -->
-
+    <!-- /.col-lg-12 -->
 </div>
 <!-- /.col-lg-6 -->
 <!-- jQuery -->

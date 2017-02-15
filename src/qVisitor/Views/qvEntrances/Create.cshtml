@@ -14,10 +14,13 @@
     </div>
     <ol class="breadcrumb">
         <li>
-            <a asp-controller="qvEntrances" asp-action="Index"> Страны</a>
+            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
+        </li>
+        <li>
+            <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId"> Заявленные посещения </a>
         </li>
         <li class="active">
-            Добавить страну
+            Удалить данные по посещениям
         </li>
     </ol>
     <!-- /.row -->

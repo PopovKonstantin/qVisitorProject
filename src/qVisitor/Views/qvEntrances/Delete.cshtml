@@ -8,16 +8,19 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Удалить страну</h1>
+            <h1 class="page-header">Удалить данные по посещениям</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
     <ol class="breadcrumb">
         <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
+            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
+        </li>
+        <li>
+            <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId"> Заявленные посещения </a>
         </li>
         <li class="active">
-            Удалить страну
+            Удалить данные по посещениям
         </li>
     </ol>
     <!-- /.row -->
@@ -26,7 +29,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Удалить страну
+                    Удалить данные по посещениям
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -43,7 +46,7 @@
                         <form asp-action="Delete">
                             <div class="form-actions no-color">
                                 <input type="submit" value="Удалить" class="btn" />
-                                <a style="color:#333;" asp-controller="qvEntrances" asp-action="Index">
+                                <a style="color:#333;" asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId">
                                     <button type="button" class="btn">Отменить</button>
                                 </a>
                             </div>

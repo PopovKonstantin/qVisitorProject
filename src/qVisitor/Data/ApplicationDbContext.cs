@@ -66,5 +66,6 @@ namespace qVisitor.Data
                 .HasForeignKey(ov => ov.VisitorId);
         }
         public DbSet<qvHotEntranceDoc> qvHotEntranceDoc { get; set; }
+        public DbSet<refOrderVisitor> refOrderVisitor { get; set; }
     }
 }

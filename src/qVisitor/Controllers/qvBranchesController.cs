@@ -33,7 +33,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvBranch = await _context.Branches.Include(d => d.Departments).SingleOrDefaultAsync(m => m.Id == id);
+            var qvBranch = await _context.Branches.Include(c => c.Company).Include(d => d.Departments).SingleOrDefaultAsync(m => m.Id == id);
             if (qvBranch == null)
             {
                 return NotFound();

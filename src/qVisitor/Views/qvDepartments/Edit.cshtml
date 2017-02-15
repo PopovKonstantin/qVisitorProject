@@ -8,38 +8,29 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Изменить департамент</h1>
+            <h1 class="page-header">Изменить название департамента</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Index"> Компании</a>
-        </li>
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1"> Филиалы </a>
-        </li>
-        <li>
-            <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId"> Департаменты </a>
-        </li>
-        <li class="active">
-            Изменить департамент
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1" class="btn btn-default"> Филиалы </a>
+        <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId" class="btn btn-default"> Департаменты </a>
+        <a href="#" class="btn btn-default"> Изменить название департамента</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Изменить департамент
+                    Изменить название департамента
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <form asp-action="Edit">
                         <div class="form-horizontal">
-                            <h4>qvDepartment</h4>
-                            <hr />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">

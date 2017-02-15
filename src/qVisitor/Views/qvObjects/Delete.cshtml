@@ -7,24 +7,17 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Удалить страну</h1>
+            <h1 class="page-header">Удалить объект</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
-        </li>
-        <li>
-            <a asp-controller="qvCountries" asp-action="Details" asp-route-id="1"> Города </a>
-        </li>
-        <li>
-            <a asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId"> Объекты </a>
-        </li>
-        <li class="active">
-            Удалить объект
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="1" class="btn btn-default"> Города </a>
+        <a asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId" class="btn btn-default"> Объекты </a>
+        <a href="#" class="btn btn-default">Удалить объект</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -35,38 +28,29 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>Вы действительно хотите удалить запись?</h3>
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                        </dl>
-
-                        <form asp-action="Delete">
-                            <div class="form-actions no-color">
-                                <input type="submit" value="Удалить" class="btn" />
-                                <a style="color:#333;" asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId">
-                                    <button type="button" class="btn">Отменить</button>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.table-responsive -->
+                    <h4>Вы действительно хотите удалить объект @Html.DisplayFor(model => model.Name) из списка объектов?</h4>
+                    <div style="padding-bottom:10px;"></div>
+                    <form asp-action="Delete">
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Удалить" class="btn" />
+                            <a style="color:#333;" asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId">
+                                <button type="button" class="btn">Отменить</button>
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.table-responsive -->
             </div>
-            <!-- /.panel -->
+            <!-- /.panel-body -->
         </div>
-        <!-- /.col-lg-12 -->
+        <!-- /.panel -->
     </div>
+    <!-- /.col-lg-12 -->
+</div>    
     <!-- /.row -->
     <!-- /.row -->
 
-</div>
+
 <!-- /.col-lg-6 -->
 <!-- jQuery -->
 <script src="~/bower_components/jquery/dist/jquery.min.js"></script>

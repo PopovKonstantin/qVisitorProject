@@ -8,28 +8,23 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Изменить город</h1>
+            <h1 class="page-header">Изменить название города</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
-        </li>
-        <li>
-            <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID"> Города </a>
-        </li>
-        <li class="active">
-            Изменить город
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID" class="btn btn-default"> Города </a>
+        <a href="#" class="btn btn-default">Изменить название города</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Изменить страну
+                    Изменить название города
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">

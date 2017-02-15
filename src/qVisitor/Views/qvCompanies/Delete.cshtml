@@ -11,14 +11,11 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-     <ol class="breadcrumb">
-         <li>
-             <a asp-controller="qvCompanies" asp-action="Index"> Компании</a>
-         </li>
-         <li class="active">
-             Удалить компанию
-         </li>
-     </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a href="#" class="btn btn-default"> Удалить компанию</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -29,38 +26,27 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>Вы действительно хотите удалить запись?</h3>
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                        </dl>
-
-                        <form asp-action="Delete">
-                            <div class="form-actions no-color">
-                                <input type="submit" value="Удалить" class="btn" />
-                                <a style="color:#333;" asp-controller="qvCompanies" asp-action="Index">
-                                    <button type="button" class="btn">Отменить</button>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.table-responsive -->
+                    <h4>Вы действительно хотите удалить компанию @Html.DisplayFor(model => model.Name) из списка компаний?</h4>
+                    <form asp-action="Delete">
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Удалить" class="btn" />
+                            <a style="color:#333;" asp-controller="qvCompanies" asp-action="Index">
+                                <button type="button" class="btn">Отменить</button>
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.table-responsive -->
             </div>
-            <!-- /.panel -->
+            <!-- /.panel-body -->
         </div>
-        <!-- /.col-lg-12 -->
+        <!-- /.panel -->
     </div>
+    <!-- /.col-lg-12 -->
+</div>
     <!-- /.row -->
     <!-- /.row -->
 
-</div>
 <!-- /.col-lg-6 -->
 <!-- jQuery -->
 <script src="~/bower_components/jquery/dist/jquery.min.js"></script>

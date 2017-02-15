@@ -8,60 +8,28 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Сведения о компании</h1>
+            <h1 class="page-header">@Html.DisplayFor(model => model.Name)</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Index"> Компании</a>
-        </li>
-        <li class="active">
-            Сведения о компании
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a href="#" class="btn btn-default"> Филиалы</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="glyphicon glyphicon-list-alt"></i>
-                    Сведения о компании
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                        </dl>
-                    </div>
-                    <div>
-
-                        <a style="color:#333;" asp-action="Edit" asp-route-id="@Model.Id">
-                            <button class="btn">Изменить</button>
-                        </a>
-                        <a style="color:#333;" asp-action="Index">
-                            <button class="btn">Назад к списку</button>
-                        </a>
-                    </div>
-                </div>
-                <!-- /.table-responsive -->
-            </div>
             <!-- /.panel-body -->
+            <div>
+                @{
+                    Html.RenderPartial("~/Views/qvBranches/Index.cshtml", Model.Branches);
+                }
+            </div>
         </div>
         <!-- /.panel -->
     </div>
     <!-- /.col-lg-12 -->
-    <div>
-        @{
-            Html.RenderPartial("~/Views/qvBranches/Index.cshtml", Model.Branches);
-        }
-    </div>
 </div>
 
 <!-- jQuery -->

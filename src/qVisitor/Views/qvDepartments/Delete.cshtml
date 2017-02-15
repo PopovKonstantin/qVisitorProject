@@ -12,20 +12,13 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Index"> Компании</a>
-        </li>
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1"> Филиалы </a>
-        </li>
-        <li>
-            <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId"> Департаменты </a>
-        </li>
-        <li class="active">
-            Удалить департамент
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1" class="btn btn-default"> Филиалы </a>
+        <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId" class="btn btn-default"> Департаменты </a>
+        <a href="#" class="btn btn-default"> Удалить департамент</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -36,36 +29,24 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>Вы действительно хотите удалить запись?</h3>
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                        </dl>
-                        <form asp-action="Delete">
-                            <div class="form-actions no-color">
-                                <input type="submit" value="Удалить" class="btn" />
-                                <a style="color:#333;" asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId">
-                                    <button type="button" class="btn">Отменить</button>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.table-responsive -->
+                    <h4>Вы действительно хотите удалить департамент @Html.DisplayFor(model => model.Name) из списка департаментов?</h4>
+                    <div style="padding-bottom:10px;"></div>
+                    <form asp-action="Delete">
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Удалить" class="btn" />
+                            <a style="color:#333;" asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId">
+                                <button type="button" class="btn">Отменить</button>
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.table-responsive -->
             </div>
-            <!-- /.panel -->
+            <!-- /.panel-body -->
         </div>
-        <!-- /.col-lg-12 -->
+        <!-- /.panel -->
     </div>
-    <!-- /.row -->
-    <!-- /.row -->
-
+    <!-- /.col-lg-12 -->
 </div>
 <!-- /.col-lg-6 -->
 <!-- jQuery -->

@@ -260,6 +260,7 @@
 "C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Controllers\qvVisitorLuggagesController.cs"
 "C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Controllers\qvVisitorScansController.cs"
 "C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Controllers\qvVisitorsController.cs"
+"C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Controllers\refOrderVisitorsController.cs"
 "C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Data\ApplicationDbContext.cs"
 "C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Data\Migrations\00000000000000_CreateIdentitySchema.cs"
 "C:\Users\Константин\Desktop\qVisitor\src\qVisitor\Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs"

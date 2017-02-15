@@ -14,10 +14,13 @@
     </div>
     <ol class="breadcrumb">
         <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
+            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
+        </li>
+        <li>
+            <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId"> Заявленные посещения </a>
         </li>
         <li class="active">
-            Изменить страну
+            Данные по посещениям
         </li>
     </ol>
     <!-- /.row -->
@@ -26,7 +29,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Сведения о стране
+                    Данные по посещениям
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -44,7 +47,7 @@
                         <a style="color:#333;" asp-action="Edit" asp-route-id="@Model.Id">
                             <button class="btn">Изменить</button>
                         </a>
-                        <a style="color:#333;" asp-action="Index">
+                        <a style="color:#333;" asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId">
                             <button class="btn">Назад к списку</button>
                         </a>
                     </div>
@@ -88,16 +91,3 @@
         });
     });
 </script>
-
-
-
-<h2>Details</h2>
-
-<div>
-    <h4>qvEntrance</h4>
-    <hr />
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>

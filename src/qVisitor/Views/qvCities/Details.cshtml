@@ -7,53 +7,19 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Сведения о городе</h1>
+            <h1 class="page-header">@Html.DisplayFor(model => model.Name)</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Index"> Страны</a>
-        </li>
-        <li>
-            <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID"> Города </a>
-        </li>
-        <li class="active">
-            Сведения о городе
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID" class="btn btn-default"> Города </a>
+        <a href="#" class="btn btn-default">Объекты</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="glyphicon glyphicon-list-alt"></i>
-                    Сведения о стране
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                                Название города
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                        </dl>
-                    </div>
-                    <div>
-
-                        <a style="color:#333;" asp-controller="qvCities" asp-action="Edit" asp-route-id="@Model.Id">
-                            <button class="btn">Изменить</button>
-                        </a>
-                        <a style="color:#333;" asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID">
-                            <button type="button" class="btn">Назад к списку</button>
-                        </a>
-                    </div>
-                </div>
-                <!-- /.table-responsive -->
-            </div>
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->

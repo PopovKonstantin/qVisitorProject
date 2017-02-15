@@ -8,16 +8,19 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Изменить страну</h1>
+            <h1 class="page-header">Изменить данные о посещении</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
     <ol class="breadcrumb">
         <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
+            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
+        </li>
+        <li>
+            <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId"> Заявленные посещения </a>
         </li>
         <li class="active">
-            Изменить страну
+            Изменить данные по посещениям
         </li>
     </ol>
     <!-- /.row -->
@@ -26,14 +29,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Изменить название страны
+                    Изменить данные по посещениям
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <form asp-action="Edit">
                         <div class="form-horizontal">
-                            <h4>qvEntrance</h4>
-                            <hr />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
@@ -74,7 +75,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Сохранить" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
+                                    <a style="color:#333;" asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>
@@ -89,71 +90,6 @@
     </div>
 </div>
 
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
-
-
-
-
-
-
-<h2>Edit</h2>
-
-<form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>qvEntrance</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-        <div class="form-group">
-            <label asp-for="ActionDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ActionDate" class="form-control" />
-                <span asp-validation-for="ActionDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="CheckPointId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="CheckPointId" class="form-control" asp-items="ViewBag.CheckPointId"></select>
-                <span asp-validation-for="CheckPointId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="EntranceTypeId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="EntranceTypeId" class="form-control" asp-items="ViewBag.EntranceTypeId"></select>
-                <span asp-validation-for="EntranceTypeId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="OrderId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="OrderId" class="form-control" asp-items="ViewBag.OrderId"></select>
-                <span asp-validation-for="OrderId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="VisitorId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
-                <span asp-validation-for="VisitorId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
