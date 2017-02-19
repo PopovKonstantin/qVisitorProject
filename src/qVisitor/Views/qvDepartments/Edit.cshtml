@@ -15,7 +15,6 @@
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
         <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
-        <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1" class="btn btn-default"> Филиалы </a>
         <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId" class="btn btn-default"> Департаменты </a>
         <a href="#" class="btn btn-default"> Изменить название департамента</a>
     </div>
@@ -34,14 +33,14 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
-                                <label asp-for="BranchId" class="control-label col-md-2"></label>
+                                <label asp-for="BranchId" class="control-label col-md-2">Филиал</label>
                                 <div class="col-md-10">
                                     <select asp-for="BranchId" class="form-control" asp-items="ViewBag.BranchId"></select>
                                     <span asp-validation-for="BranchId" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Name" class="col-md-2 control-label"></label>
+                                <label asp-for="Name" class="col-md-2 control-label">Название департамента</label>
                                 <div class="col-md-10">
                                     <input asp-for="Name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" />

@@ -18,14 +18,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-        [Route("Countries/Cities/Objects")]
+
         // GET: qvObjects
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Objects.Include(q => q.City);
             return View(await applicationDbContext.ToListAsync());
         }
-        [Route("Countries/Cities/Objects/Details/{id}")]
+        [Route("Countries/Cities/Objects{id}")]
         // GET: qvObjects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,15 +44,21 @@ namespace qVisitor.Controllers
         }
         [Route("Countries/Cities/Objects/Create")]
         // GET: qvObjects/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id");
+            if (reffid == null)
+            {
+                return NotFound();
+            }
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", reffid);
+            ViewData["Reff"] = reffid;
             return View();
         }
 
         // POST: qvObjects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Countries/Cities/Objects/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CityId,Name")] qvObject qvObject)
@@ -61,9 +67,9 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvObject);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details","qvCities", qvObject.CityId);
+                return RedirectToAction("Details", "qvCities", new { id = qvObject.CityId });
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", qvObject.CityId);
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvObject.CityId);
             return View(qvObject);
         }
         [Route("Countries/Cities/Objects/Edit/{id}")]
@@ -80,13 +86,14 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", qvObject.CityId);
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvObject.CityId);
             return View(qvObject);
         }
 
         // POST: qvObjects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Countries/Cities/Objects/Edit/{id}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CityId,Name")] qvObject qvObject)
@@ -114,12 +121,12 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "qvCities", qvObject.CityId);
+                return RedirectToAction("Details", "qvCities", new { id = qvObject.CityId });
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", qvObject.CityId);
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvObject.CityId);
             return View(qvObject);
         }
-        [Route("Countries/Cities/Objects/Delete/{id}")]
+        [Route("Countries/Cities/Objects/Detete/{id}")]
         // GET: qvObjects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -138,6 +145,7 @@ namespace qVisitor.Controllers
         }
 
         // POST: qvObjects/Delete/5
+        [Route("Countries/Cities/Objects/Detete/{id}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -145,7 +153,7 @@ namespace qVisitor.Controllers
             var qvObject = await _context.Objects.SingleOrDefaultAsync(m => m.Id == id);
             _context.Objects.Remove(qvObject);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details","qvCities", qvObject.CityId);
+            return RedirectToAction("Details", "qvCities", new { id = qvObject.CityId });
         }
 
         private bool qvObjectExists(int id)

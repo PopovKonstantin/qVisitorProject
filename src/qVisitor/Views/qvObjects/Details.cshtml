@@ -15,7 +15,6 @@
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
         <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
-        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="1" class="btn btn-default"> Города </a>
         <a asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId" class="btn btn-default"> Объекты </a>
         <a href="#" class="btn btn-default">Изменить название объекта</a>
     </div>

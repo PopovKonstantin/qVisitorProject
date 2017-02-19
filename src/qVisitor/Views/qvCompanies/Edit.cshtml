@@ -33,14 +33,14 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
-                                <label asp-for="CounryId" class="control-label col-md-2"></label>
+                                <label asp-for="CounryId" class="control-label col-md-2">Страна</label>
                                 <div class="col-md-10">
                                     <select asp-for="CounryId" class="form-control" asp-items="ViewBag.CounryId"></select>
                                     <span asp-validation-for="CounryId" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Name" class="col-md-2 control-label"></label>
+                                <label asp-for="Name" class="col-md-2 control-label">Название компании</label>
                                 <div class="col-md-10">
                                     <input asp-for="Name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" />

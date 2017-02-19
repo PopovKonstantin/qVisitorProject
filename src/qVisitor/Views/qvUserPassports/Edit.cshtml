@@ -4,94 +4,58 @@
     ViewData["Title"] = "Edit";
 }
 
+<h2>Edit</h2>
 
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Изменить страну</h1>
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>qvUserPassport</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Birthdate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Birthdate" class="form-control" />
+                <span asp-validation-for="Birthdate" class="text-danger" />
+            </div>
         </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
-        </li>
-        <li class="active">
-            Изменить страну
-        </li>
-    </ol>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="glyphicon glyphicon-list-alt"></i>
-                    Изменить название страны
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <form asp-action="Edit">
-                        <div class="form-horizontal">
-                            <h4>qvUserPassport</h4>
-                            <hr />
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />
-                            <div class="form-group">
-                                <label asp-for="Birthdate" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <input asp-for="Birthdate" class="form-control" />
-                                    <span asp-validation-for="Birthdate" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="GenderId" class="control-label col-md-2"></label>
-                                <div class="col-md-10">
-                                    <select asp-for="GenderId" class="form-control" asp-items="ViewBag.GenderId"></select>
-                                    <span asp-validation-for="GenderId" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Name" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <input asp-for="Name" class="form-control" />
-                                    <span asp-validation-for="Name" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Patronymic" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <input asp-for="Patronymic" class="form-control" />
-                                    <span asp-validation-for="Patronymic" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Surname" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <input asp-for="Surname" class="form-control" />
-                                    <span asp-validation-for="Surname" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Сохранить" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
-                                        <button type="button" class="btn">Отменить</button>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.row -->
-                <!-- /.row -->
-
+        <div class="form-group">
+            <label asp-for="Gender" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Patronymic" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Patronymic" class="form-control" />
+                <span asp-validation-for="Patronymic" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Surname" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
 
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

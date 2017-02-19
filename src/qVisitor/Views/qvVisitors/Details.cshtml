@@ -1,123 +1,48 @@
-﻿@model qVisitor.Models.qvVisitor
+@model qVisitor.Models.qvVisitor
 
 @{
     ViewData["Title"] = "Details";
 }
 
+<h2>Details</h2>
 
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Данные о посетителе</h1>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li class="active">
-            Данные о посетителе
-        </li>
-    </ol>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="glyphicon glyphicon-list-alt"></i>
-                    Данные о посетителе
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>
-                               Дата рождения
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.birthdate)
-                            </dd>
-                            <dt>
-                                Фамилия
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.surname)
-                            </dd>
-                            <dt>
-                                Имя
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.name)
-                            </dd>
-                            <dt>
-                                Отчество
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.patronymic)
-                            </dd>
-                        </dl>
-                    </div>
-                    <div>
-                        <a style="color:#333;" asp-controller="qvVisitors" asp-action="Edit" asp-route-id="@Model.Id">
-                            <button class="btn">Изменить</button>
-                        </a>
-                        <a style="color:#333;" asp-controller="qvVisitors" asp-action="Index">
-                            <button class="btn">Назад к списку</button>
-                        </a>
-                    </div>
-                </div>
-                <!-- /.table-responsive -->
-            </div>
-            <!-- /.panel-body -->
-        </div>
-        <!-- /.panel -->
-    </div>
-    <!-- /.col-lg-12 -->
-    <div>
-        @{
-            Html.RenderPartial("~/Views/qvVisitorDocs/Index.cshtml", Model.VisitorDocs);
-        }
-    </div>
-    <div>
-        @{
-            Html.RenderPartial("~/Views/qvVisitorLuggages/Index.cshtml", Model.VisitorLuggages);
-        }
-    </div>
-    <div>
-        @{
-            Html.RenderPartial("~/Views/qvVisitiorPhotoes/Index.cshtml", Model.VisitorPhotoes);
-        }
-    </div>
-    <div>
-        @{
-            Html.RenderPartial("~/Views/qvVisitorScans/Index.cshtml", Model.VisitorScans);
-        }
-    </div>
-
+<div>
+    <h4>qvVisitor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.birthdate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.birthdate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.patronymic)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.patronymic)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.surname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.surname)
+        </dd>
+    </dl>
 </div>
-
-<!-- jQuery -->
-<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-<!-- Metis Menu Plugin JavaScript -->
-<script src="~/bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
-<!-- DataTables JavaScript -->
-<script src="~/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="~/js/sb-admin-2.js"></script>
-
-<!-- Page-Level Demo Scripts - Tables - Use for reference -->
-<script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-                responsive: true
-        });
-    });
-</script>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -25,7 +25,7 @@ namespace qVisitor.Controllers
             var applicationDbContext = _context.Departments.Include(q => q.Branch);
             return View(await applicationDbContext.ToListAsync());
         }
-        [Route("Companies/Branches/Departments/Details/{id}")]
+        [Route("Companies/Branches/Departments/{id}")]
         // GET: qvDepartments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,17 +42,24 @@ namespace qVisitor.Controllers
 
             return View(qvDepartment);
         }
+
         [Route("Companies/Branches/Departments/Create")]
         // GET: qvDepartments/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Id");
+            if (reffid == null)
+            {
+                return NotFound();
+            }
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", reffid);
+            ViewData["Reff"] = reffid;
             return View();
         }
 
         // POST: qvDepartments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Companies/Branches/Departments/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,BranchId,Name")] qvDepartment qvDepartment)
@@ -61,9 +68,9 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvDepartment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvBranches", new { id = qvDepartment.BranchId });
             }
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Id", qvDepartment.BranchId);
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", qvDepartment.BranchId);
             return View(qvDepartment);
         }
         [Route("Companies/Branches/Departments/Edit/{id}")]
@@ -80,13 +87,14 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Id", qvDepartment.BranchId);
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", qvDepartment.BranchId);
             return View(qvDepartment);
         }
 
         // POST: qvDepartments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Companies/Branches/Departments/Edit/{id}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BranchId,Name")] qvDepartment qvDepartment)
@@ -114,9 +122,9 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvBranches", new { id = qvDepartment.BranchId });
             }
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Id", qvDepartment.BranchId);
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", qvDepartment.BranchId);
             return View(qvDepartment);
         }
         [Route("Companies/Branches/Departments/Delete/{id}")]
@@ -138,6 +146,7 @@ namespace qVisitor.Controllers
         }
 
         // POST: qvDepartments/Delete/5
+        [Route("Companies/Branches/Departments/Delete/{id}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -145,7 +154,7 @@ namespace qVisitor.Controllers
             var qvDepartment = await _context.Departments.SingleOrDefaultAsync(m => m.Id == id);
             _context.Departments.Remove(qvDepartment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvBranches", new { id = qvDepartment.BranchId });
         }
 
         private bool qvDepartmentExists(int id)

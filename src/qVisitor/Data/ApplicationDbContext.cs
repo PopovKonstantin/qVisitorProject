@@ -17,7 +17,6 @@ namespace qVisitor.Data
         public DbSet<qvDepartment> Departments { get; set; }
         public DbSet<qvCheckPoint> CheckPoints { get; set; }
         public DbSet<qvCompany> Companies { get; set; }
-        public DbSet<qvGender> Genders { get; set; }
         public DbSet<qvHotEntrance> HotEntrances { get; set; }
         public DbSet<qvObject> Objects { get; set; }
         public DbSet<qvOrder> Orders { get; set; }

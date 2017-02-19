@@ -36,20 +36,6 @@ namespace qVisitor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "qvGender",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    Code = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_qvGender", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "qvOrderComment",
                 columns: table => new
                 {
@@ -99,6 +85,23 @@ namespace qVisitor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "qvUserPassport",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    Birthdate = table.Column<DateTime>(nullable: false),
+                    Gender = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Patronymic = table.Column<string>(nullable: true),
+                    Surname = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_qvUserPassport", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "qvUserPhoto",
                 columns: table => new
                 {
@@ -110,6 +113,23 @@ namespace qVisitor.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_qvUserPhoto", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "qvVisitor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    Gender = table.Column<string>(nullable: true),
+                    birthdate = table.Column<DateTime>(nullable: false),
+                    name = table.Column<string>(nullable: true),
+                    patronymic = table.Column<string>(nullable: true),
+                    surname = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_qvVisitor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,8 +159,7 @@ namespace qVisitor.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
                     CounryId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    qvCompanyId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -149,58 +168,6 @@ namespace qVisitor.Data.Migrations
                         name: "FK_qvCompany_qvCountry_CounryId",
                         column: x => x.CounryId,
                         principalTable: "qvCountry",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_qvCompany_qvCompany_qvCompanyId",
-                        column: x => x.qvCompanyId,
-                        principalTable: "qvCompany",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "qvUserPassport",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    Birthdate = table.Column<DateTime>(nullable: false),
-                    GenderId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Patronymic = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_qvUserPassport", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_qvUserPassport_qvGender_GenderId",
-                        column: x => x.GenderId,
-                        principalTable: "qvGender",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "qvVisitor",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    GenderId = table.Column<int>(nullable: false),
-                    birthdate = table.Column<DateTime>(nullable: false),
-                    name = table.Column<string>(nullable: true),
-                    patronymic = table.Column<string>(nullable: true),
-                    surname = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_qvVisitor", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_qvVisitor_qvGender_GenderId",
-                        column: x => x.GenderId,
-                        principalTable: "qvGender",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -231,54 +198,6 @@ namespace qVisitor.Data.Migrations
                         name: "FK_qvOrder_qvOrderType_OrderTypeid",
                         column: x => x.OrderTypeid,
                         principalTable: "qvOrderType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "qvObject",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    CityId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_qvObject", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_qvObject_qvCity_CityId",
-                        column: x => x.CityId,
-                        principalTable: "qvCity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "qvBranch",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    CityId = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false),
-                    HighBranchId = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_qvBranch", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_qvBranch_qvCity_CityId",
-                        column: x => x.CityId,
-                        principalTable: "qvCity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_qvBranch_qvCompany_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "qvCompany",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -344,6 +263,54 @@ namespace qVisitor.Data.Migrations
                         name: "FK_qvVisitorScan_qvVisitor_VisitorId",
                         column: x => x.VisitorId,
                         principalTable: "qvVisitor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "qvObject",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    CityId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_qvObject", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_qvObject_qvCity_CityId",
+                        column: x => x.CityId,
+                        principalTable: "qvCity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "qvBranch",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    CityId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false),
+                    HighBranchId = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_qvBranch", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_qvBranch_qvCity_CityId",
+                        column: x => x.CityId,
+                        principalTable: "qvCity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_qvBranch_qvCompany_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "qvCompany",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -673,11 +640,6 @@ namespace qVisitor.Data.Migrations
                 column: "CounryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_qvCompany_qvCompanyId",
-                table: "qvCompany",
-                column: "qvCompanyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_qvDepartment_BranchId",
                 table: "qvDepartment",
                 column: "BranchId");
@@ -773,19 +735,9 @@ namespace qVisitor.Data.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_qvUserPassport_GenderId",
-                table: "qvUserPassport",
-                column: "GenderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_qvVisitorPhoto_VisitorId",
                 table: "qvVisitorPhoto",
                 column: "VisitorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_qvVisitor_GenderId",
-                table: "qvVisitor",
-                column: "GenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_qvVisitorDoc_VisitorId",
@@ -891,9 +843,6 @@ namespace qVisitor.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "qvOrderType");
-
-            migrationBuilder.DropTable(
-                name: "qvGender");
 
             migrationBuilder.DropTable(
                 name: "qvBranch");

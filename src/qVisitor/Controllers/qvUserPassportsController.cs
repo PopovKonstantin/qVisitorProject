@@ -22,8 +22,7 @@ namespace qVisitor.Controllers
         // GET: qvUserPassports
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.qvUserPassports.Include(q => q.Gender);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.qvUserPassports.ToListAsync());
         }
 
         // GET: qvUserPassports/Details/5
@@ -46,7 +45,6 @@ namespace qVisitor.Controllers
         // GET: qvUserPassports/Create
         public IActionResult Create()
         {
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id");
             return View();
         }
 
@@ -55,7 +53,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Birthdate,GenderId,Name,Patronymic,Surname")] qvUserPassport qvUserPassport)
+        public async Task<IActionResult> Create([Bind("Id,Birthdate,Gender,Name,Patronymic,Surname")] qvUserPassport qvUserPassport)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +61,6 @@ namespace qVisitor.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", qvUserPassport.GenderId);
             return View(qvUserPassport);
         }
 
@@ -80,7 +77,6 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", qvUserPassport.GenderId);
             return View(qvUserPassport);
         }
 
@@ -89,7 +85,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Birthdate,GenderId,Name,Patronymic,Surname")] qvUserPassport qvUserPassport)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Birthdate,Gender,Name,Patronymic,Surname")] qvUserPassport qvUserPassport)
         {
             if (id != qvUserPassport.Id)
             {
@@ -116,7 +112,6 @@ namespace qVisitor.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", qvUserPassport.GenderId);
             return View(qvUserPassport);
         }
 

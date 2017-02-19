@@ -15,7 +15,8 @@
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
         <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
-        <a href="#" class="btn btn-default">Изменить название страны</a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@ViewBag.Reff" class="btn btn-default"> Города </a>
+        <a href="#" class="btn btn-default">Добавить город</a>
     </div>
     <!-- /.row -->
     <div class="row">
@@ -26,13 +27,12 @@
                     Добавить город
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body">
-                    
+                <div class="panel-body">  
                     <form asp-action="Create">
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="CountryID" class="col-md-2 control-label">Номер страны</label>
+                                <label asp-for="CountryID" class="col-md-2 control-label">Страна</label>
                                 <div class="col-md-10">
                                     <select asp-for="CountryID" class="form-control" asp-items="ViewBag.CountryID"></select>
                                 </div>
@@ -40,14 +40,14 @@
                             <div class="form-group">
                                 <label asp-for="Name" class="col-md-2 control-label">Название города</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Name" class="form-control" />
+                                    <input asp-for="Name" class="form-control" value=""/>
                                     <span asp-validation-for="Name" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Создать" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
+                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Details" asp-route-id="@ViewBag.Reff">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>

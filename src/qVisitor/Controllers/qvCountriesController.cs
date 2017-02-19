@@ -18,14 +18,13 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
-        [Route("Country")]
+        [Route("Countries")]
         // GET: qvCountries
         public async Task<IActionResult> Index()
         {
             return View(await _context.Countries.ToListAsync());
         }
-        [Route("Country/Details/{id}")]
+        [Route("Countries/{id}/Cities/")]
         // GET: qvCountries/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,7 +41,8 @@ namespace qVisitor.Controllers
 
             return View(qvCountry);
         }
-        [Route("Country/Create")]
+
+        [Route("Countries/Create")]
         // GET: qvCountries/Create
         public IActionResult Create()
         {
@@ -52,6 +52,7 @@ namespace qVisitor.Controllers
         // POST: qvCountries/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Countries/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] qvCountry qvCountry)
@@ -60,11 +61,11 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvCountry);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Create");
+                return RedirectToAction("Index");
             }
             return View(qvCountry);
         }
-        [Route("Country/Edit/{id}")]
+        [Route("Countries/{id}/Edit/")]
         // GET: qvCountries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,6 +85,7 @@ namespace qVisitor.Controllers
         // POST: qvCountries/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Countries/{id}/Edit/")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] qvCountry qvCountry)
@@ -111,11 +113,11 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Edit");
+                return RedirectToAction("Index");
             }
             return View(qvCountry);
         }
-        [Route("Country/Delete/{id}")]
+        [Route("Countries/{id}/Delete/")]
         // GET: qvCountries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,6 +136,7 @@ namespace qVisitor.Controllers
         }
 
         // POST: qvCountries/Delete/5
+        [Route("Countries/{id}/Delete/")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -141,7 +144,7 @@ namespace qVisitor.Controllers
             var qvCountry = await _context.Countries.SingleOrDefaultAsync(m => m.Id == id);
             _context.Countries.Remove(qvCountry);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index","qvCountry");
+            return RedirectToAction("Index");
         }
 
         private bool qvCountryExists(int id)

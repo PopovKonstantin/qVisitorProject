@@ -32,13 +32,13 @@
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="CounryId" class="col-md-2 control-label"></label>
+                                <label asp-for="CounryId" class="col-md-2 control-label">Страна</label>
                                 <div class="col-md-10">
                                     <select asp-for="CounryId" class="form-control" asp-items="ViewBag.CounryId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Name" class="col-md-2 control-label"></label>
+                                <label asp-for="Name" class="col-md-2 control-label">Название компании</label>
                                 <div class="col-md-10">
                                     <input asp-for="Name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" />
@@ -46,7 +46,10 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Create" class="btn btn-default" />
+                                    <input type="submit" value="Создать" class="btn" />
+                                    <a style="color:#333;" asp-controller="qvCompanies" asp-action="Index">
+                                        <button type="button" class="btn">Отменить</button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

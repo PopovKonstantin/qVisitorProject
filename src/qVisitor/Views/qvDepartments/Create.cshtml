@@ -13,20 +13,13 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Index"> Компании</a>
-        </li>
-        <li>
-            <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1"> Филиалы </a>
-        </li>
-        <li>
-            <a asp-controller="qvBranches" asp-action="Details" asp-route-id="1"> Департаменты </a>
-        </li>
-        <li class="active">
-            Добавить департамент
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="1" class="btn btn-default"> Филиалы </a>
+        <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@ViewBag.Reff" class="btn btn-default"> Департаменты </a>
+        <a href="#" class="btn btn-default"> Удалить департамент</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -41,13 +34,13 @@
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="BranchId" class="col-md-2 control-label"></label>
+                                <label asp-for="BranchId" class="col-md-2 control-label">Филиал</label>
                                 <div class="col-md-10">
                                     <select asp-for="BranchId" class="form-control" asp-items="ViewBag.BranchId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Name" class="col-md-2 control-label"></label>
+                                <label asp-for="Name" class="col-md-2 control-label">Название департамента</label>
                                 <div class="col-md-10">
                                     <input asp-for="Name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" />
@@ -56,7 +49,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Создать" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCompanies" asp-action="Details" asp-route-id="1">
+                                    <a style="color:#333;" asp-controller="qvCompanies" asp-action="Details" asp-route-id="@ViewBag.Reff">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>

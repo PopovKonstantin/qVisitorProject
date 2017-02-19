@@ -234,13 +234,9 @@ namespace qVisitor.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("qvCompanyId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CounryId");
-
-                    b.HasIndex("qvCompanyId");
 
                     b.ToTable("qvCompany");
                 });
@@ -345,20 +341,6 @@ namespace qVisitor.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("qvEntranceType");
-                });
-
-            modelBuilder.Entity("qVisitor.Models.qvGender", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("qvGender");
                 });
 
             modelBuilder.Entity("qVisitor.Models.qvHotEntrance", b =>
@@ -560,7 +542,7 @@ namespace qVisitor.Data.Migrations
 
                     b.Property<DateTime>("Birthdate");
 
-                    b.Property<int>("GenderId");
+                    b.Property<string>("Gender");
 
                     b.Property<string>("Name");
 
@@ -569,8 +551,6 @@ namespace qVisitor.Data.Migrations
                     b.Property<string>("Surname");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GenderId");
 
                     b.ToTable("qvUserPassport");
                 });
@@ -612,7 +592,7 @@ namespace qVisitor.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("GenderId");
+                    b.Property<string>("Gender");
 
                     b.Property<DateTime>("birthdate");
 
@@ -623,8 +603,6 @@ namespace qVisitor.Data.Migrations
                     b.Property<string>("surname");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GenderId");
 
                     b.ToTable("qvVisitor");
                 });
@@ -749,7 +727,7 @@ namespace qVisitor.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("qVisitor.Models.qvCompany", "Company")
-                        .WithMany()
+                        .WithMany("Branches")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -776,10 +754,6 @@ namespace qVisitor.Data.Migrations
                         .WithMany("Companies")
                         .HasForeignKey("CounryId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("qVisitor.Models.qvCompany")
-                        .WithMany("Branches")
-                        .HasForeignKey("qvCompanyId");
                 });
 
             modelBuilder.Entity("qVisitor.Models.qvDepartment", b =>
@@ -911,27 +885,11 @@ namespace qVisitor.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("qVisitor.Models.qvUserPassport", b =>
-                {
-                    b.HasOne("qVisitor.Models.qvGender", "Gender")
-                        .WithMany("UserPassports")
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("qVisitor.Models.qvVisitiorPhoto", b =>
                 {
                     b.HasOne("qVisitor.Models.qvVisitor", "Visitor")
                         .WithMany("VisitorPhotoes")
                         .HasForeignKey("VisitorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("qVisitor.Models.qvVisitor", b =>
-                {
-                    b.HasOne("qVisitor.Models.qvGender", "Gender")
-                        .WithMany("Visitors")
-                        .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

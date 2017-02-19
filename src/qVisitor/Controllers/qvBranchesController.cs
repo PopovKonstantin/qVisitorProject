@@ -18,13 +18,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
+        
         // GET: qvBranches
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Branches.Include(q => q.City).Include(q => q.Company);
             return View(await applicationDbContext.ToListAsync());
         }
-        [Route("Companies/Branches/Details/{id}")]
+        [Route("Companies/Branches/{id}/Departments")]
         // GET: qvBranches/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,7 +34,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvBranch = await _context.Branches.Include(c => c.Company).Include(d => d.Departments).SingleOrDefaultAsync(m => m.Id == id);
+            var qvBranch = await _context.Branches.Include(d => d.Departments).SingleOrDefaultAsync(m => m.Id == id);
             if (qvBranch == null)
             {
                 return NotFound();
@@ -43,16 +44,22 @@ namespace qVisitor.Controllers
         }
         [Route("Companies/Branches/Create")]
         // GET: qvBranches/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id");
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
+            if (reffid == null)
+            {
+                return NotFound();
+            }
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name");
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name",reffid);
+            ViewData["Reff"] = reffid;
             return View();
         }
 
         // POST: qvBranches/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Companies/Branches/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CityId,CompanyId,HighBranchId,Name")] qvBranch qvBranch)
@@ -61,10 +68,10 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvBranch);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "qvCompanies", qvBranch.CompanyId);
+                return RedirectToAction("Details", "qvCompany", new { id = qvBranch.CompanyId });
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", qvBranch.CityId);
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", qvBranch.CompanyId);
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvBranch.CityId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", qvBranch.CompanyId);
             return View(qvBranch);
         }
         [Route("Companies/Branches/Edit/{id}")]
@@ -81,14 +88,15 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", qvBranch.CityId);
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", qvBranch.CompanyId);
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvBranch.CityId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", qvBranch.CompanyId);
             return View(qvBranch);
         }
 
         // POST: qvBranches/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Companies/Branches/Edit/{id}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CityId,CompanyId,HighBranchId,Name")] qvBranch qvBranch)
@@ -116,10 +124,10 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "qvCompanies", qvBranch.CompanyId);
+                return RedirectToAction("Details", "qvCompany", new { id = qvBranch.CompanyId });
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", qvBranch.CityId);
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", qvBranch.CompanyId);
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvBranch.CityId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", qvBranch.CompanyId);
             return View(qvBranch);
         }
         [Route("Companies/Branches/Delete/{id}")]
@@ -141,6 +149,7 @@ namespace qVisitor.Controllers
         }
 
         // POST: qvBranches/Delete/5
+        [Route("Companies/Branches/Delete/{id}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -148,7 +157,7 @@ namespace qVisitor.Controllers
             var qvBranch = await _context.Branches.SingleOrDefaultAsync(m => m.Id == id);
             _context.Branches.Remove(qvBranch);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "qvCompanies", qvBranch.CompanyId);
+            return RedirectToAction("Details", "qvCompany", new { id = qvBranch.CompanyId });
         }
 
         private bool qvBranchExists(int id)

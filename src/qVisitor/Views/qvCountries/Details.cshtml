@@ -27,7 +27,14 @@
                 @{
                     Html.RenderPartial("~/Views/qvCities/Index.cshtml", Model.Cities);
                 }
+                <div class="well">
+                    <a style="color:#333;" asp-controller="qvCities" asp-action="Create" asp-route-reffid="@Model.Id ">
+                        <button type="button" class="btn">Добавить город</button>
+                    </a>
+                </div>
             </div>
+        </div>
+    </div>
         </div>
     </div>
 </div>

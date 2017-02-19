@@ -18,14 +18,13 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-        [Route("Visitors")]
+
         // GET: qvVisitors
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Visitors.Include(q => q.Gender);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Visitors.ToListAsync());
         }
-        [Route("Visitors/Details/{id}")]
+
         // GET: qvVisitors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -34,7 +33,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvVisitor = await _context.Visitors.Include(vp => vp.VisitorPhotoes).Include(vd => vd.VisitorDocs).Include(vl => vl.VisitorLuggages).Include(vs => vs.VisitorScans).SingleOrDefaultAsync(m => m.Id == id);
+            var qvVisitor = await _context.Visitors.SingleOrDefaultAsync(m => m.Id == id);
             if (qvVisitor == null)
             {
                 return NotFound();
@@ -42,11 +41,10 @@ namespace qVisitor.Controllers
 
             return View(qvVisitor);
         }
-        [Route("Visitors/Create")]
+
         // GET: qvVisitors/Create
         public IActionResult Create()
         {
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id");
             return View();
         }
 
@@ -55,7 +53,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GenderId,birthdate,name,patronymic,surname")] qvVisitor qvVisitor)
+        public async Task<IActionResult> Create([Bind("Id,Gender,birthdate,name,patronymic,surname")] qvVisitor qvVisitor)
         {
             if (ModelState.IsValid)
             {
@@ -63,10 +61,9 @@ namespace qVisitor.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", qvVisitor.GenderId);
             return View(qvVisitor);
         }
-        [Route("Visitors/Edit/{id}")]
+
         // GET: qvVisitors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -80,7 +77,6 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", qvVisitor.GenderId);
             return View(qvVisitor);
         }
 
@@ -89,7 +85,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GenderId,birthdate,name,patronymic,surname")] qvVisitor qvVisitor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Gender,birthdate,name,patronymic,surname")] qvVisitor qvVisitor)
         {
             if (id != qvVisitor.Id)
             {
@@ -116,10 +112,9 @@ namespace qVisitor.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", qvVisitor.GenderId);
             return View(qvVisitor);
         }
-        [Route("Visitors/Delete/{id}")]
+
         // GET: qvVisitors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
