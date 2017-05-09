@@ -25,9 +25,6 @@ namespace qVisitor.Models
         [ForeignKey("OrderId")]
         public qvOrder Order { get; set; }
 
-        public int VisitorId { get; set; }
-        [ForeignKey("VisitorId")]
-        public qvVisitor Visitor { get; set; }
         public ICollection<qvEntrancePhoto> EntrancePhotoes { get; set; }
         public ICollection<qvEntranceDoc> EntranceDocs { get; set; }
 

@@ -13,35 +13,30 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId> Документы</a>
-        </li>
-        <li class="active">
-            Удалить результаты сканирования
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvVisitors" asp-action="Index" class="btn btn-default">Посетители</a>
+        <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId class="btn btn-default"> Результаты сканирования </a>
+        <a href="#" class="btn btn-default"> Удалить данные результатов сканирования</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Удалить результаты сканирования
+                    Удалить данные результатов сканирования
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <h3>Вы действительно хотите удалить запись?</h3>
                     <div>
                         <dl class="dl-horizontal">
-                            <dt>
-                               Результаты сканирования
-                            </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Scan)
+                                @if (@Model.Scan != null)
+                                {
+                                    <img style='width:480px; height:360px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Scan))" />
+                                }
                             </dd>
                         </dl>
                         <form asp-action="Delete">

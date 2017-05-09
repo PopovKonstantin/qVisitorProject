@@ -1,4 +1,4 @@
-@model qVisitor.Models.qvOrder
+﻿@model qVisitor.Models.qvOrder
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,62 +8,59 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">������� ������</h1>
+            <h1 class="page-header">Удалить заявку</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> ������</a>
-        </li>
-        <li class="active">
-            ������� ������
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvOrders" asp-action="Index" class="btn btn-default">Заявки</a>
+        <a href="#" class="btn btn-default"> Удалить заявку</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    ������� ������
+                    Удалить заявку
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>�� ������������� ������ ������� ������?</h3>
+                    <h3>Вы действительно хотите удалить заявку со следующими параметрами?</h3>
                     <div>
                         <dl class="dl-horizontal">
                             <dt>
-                                @Html.DisplayNameFor(model => model.CloseTime)
+                                Дата начала <br />действия заявки
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.CloseTime)
+                                @Model.StartDate.ToString("dd.MM.yyyy")
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.EndDate)
+                                Время начала <br />действия заявки
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.EndDate)
+                                @Model.OpenTime.ToString("H:mm")
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.OpenTime)
+                                Дата окончания <br />действия заявки
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.OpenTime)
+                                @Model.EndDate.ToString("dd.MM.yyyy")
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.StartDate)
+                                Время окончания <br />действия заявки
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.StartDate)
+                                @Model.CloseTime.ToString("H:mm")
                             </dd>
                         </dl>
 
                         <form asp-action="Delete">
                             <div class="form-actions no-color">
-                                <input type="submit" value="�������" class="btn" />
-                                <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
-                                    <button type="button" class="btn">��������</button>
+                                <input type="submit" value="Удалить" class="btn" />
+                                <a style="color:#333;" asp-controller="qvOrders" asp-action="Index">
+                                    <button type="button" class="btn">Отменить</button>
                                 </a>
                             </div>
                         </form>

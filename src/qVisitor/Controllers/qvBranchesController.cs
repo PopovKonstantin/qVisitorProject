@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +19,16 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-        
+
         // GET: qvBranches
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Branches.Include(q => q.City).Include(q => q.Company);
             return View(await applicationDbContext.ToListAsync());
         }
         [Route("Companies/Branches/{id}/Departments")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvBranches/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,6 +46,7 @@ namespace qVisitor.Controllers
             return View(qvBranch);
         }
         [Route("Companies/Branches/Create")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvBranches/Create
         public IActionResult Create(int? reffid)
         {
@@ -68,13 +72,14 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvBranch);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "qvCompany", new { id = qvBranch.CompanyId });
+                return RedirectToAction("Details", "qvCompanies", new { id = qvBranch.CompanyId });
             }
             ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvBranch.CityId);
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", qvBranch.CompanyId);
             return View(qvBranch);
         }
         [Route("Companies/Branches/Edit/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvBranches/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -124,13 +129,14 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "qvCompany", new { id = qvBranch.CompanyId });
+                return RedirectToAction("Details", "qvCompanies", new { id = qvBranch.CompanyId });
             }
             ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", qvBranch.CityId);
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", qvBranch.CompanyId);
             return View(qvBranch);
         }
         [Route("Companies/Branches/Delete/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvBranches/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -157,7 +163,7 @@ namespace qVisitor.Controllers
             var qvBranch = await _context.Branches.SingleOrDefaultAsync(m => m.Id == id);
             _context.Branches.Remove(qvBranch);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "qvCompany", new { id = qvBranch.CompanyId });
+            return RedirectToAction("Details", "qvCompanies", new { id = qvBranch.CompanyId });
         }
 
         private bool qvBranchExists(int id)

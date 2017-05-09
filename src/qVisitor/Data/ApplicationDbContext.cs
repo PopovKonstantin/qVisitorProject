@@ -36,8 +36,6 @@ namespace qVisitor.Data
         public DbSet<qvEntrancePhoto> EntrancePhotos { get; set; }
         public DbSet<qvEntranceDoc> EntranceDocs { get; set; }
         public DbSet<qvOrderStatusHistory> OrderStatusHistories { get; set; }
-        public DbSet<qvUserPhoto> UserPhotos { get; set; }
-        public DbSet<qvUserPassport> qvUserPassports { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

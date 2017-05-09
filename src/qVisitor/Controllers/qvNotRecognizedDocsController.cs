@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +21,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvNotRecognizedDocs
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.NotRecognizedDocs.Include(q => q.CheckPoint);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvNotRecognizedDocs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,11 +45,14 @@ namespace qVisitor.Controllers
 
             return View(qvNotRecognizedDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvNotRecognizedDocs/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id");
+            var applicationDbContext = _context.CheckPoints.SingleOrDefault(m => m.Id == id);
+            ViewData["KPPName"] = applicationDbContext.Name;
+            ViewData["KPPId"] = id;
+            ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id",id);
             return View();
         }
 
@@ -55,18 +61,29 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CheckPointId,Scan")] qvNotRecognizedDoc qvNotRecognizedDoc)
+        public async Task<IActionResult> Create([Bind("Id,CheckPointId")] qvNotRecognizedDoc qvNotRecognizedDoc, IFormFile Scan)
         {
             if (ModelState.IsValid)
             {
+                if (Scan != null)
+                {
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(Scan.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)Scan.Length);
+                    }
+                    // установка массива байтов
+                    qvNotRecognizedDoc.Scan = imageData;
+                }
                 _context.Add(qvNotRecognizedDoc);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvCheckPoints", new { id = qvNotRecognizedDoc.CheckPointId });
             }
             ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id", qvNotRecognizedDoc.CheckPointId);
             return View(qvNotRecognizedDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvNotRecognizedDocs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -75,7 +92,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvNotRecognizedDoc = await _context.NotRecognizedDocs.SingleOrDefaultAsync(m => m.Id == id);
+            var qvNotRecognizedDoc = await _context.NotRecognizedDocs.Include(q => q.CheckPoint).SingleOrDefaultAsync(m => m.Id == id);
             if (qvNotRecognizedDoc == null)
             {
                 return NotFound();
@@ -89,7 +106,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CheckPointId,Scan")] qvNotRecognizedDoc qvNotRecognizedDoc)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CheckPointId")] qvNotRecognizedDoc qvNotRecognizedDoc, IFormFile Scan)
         {
             if (id != qvNotRecognizedDoc.Id)
             {
@@ -100,6 +117,17 @@ namespace qVisitor.Controllers
             {
                 try
                 {
+                    if (Scan != null)
+                    {
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(Scan.OpenReadStream()))
+                        {
+                            imageData = binaryReader.ReadBytes((int)Scan.Length);
+                        }
+                        // установка массива байтов
+                        qvNotRecognizedDoc.Scan = imageData;
+                    }
                     _context.Update(qvNotRecognizedDoc);
                     await _context.SaveChangesAsync();
                 }
@@ -114,12 +142,12 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvCheckPoints", new { id = qvNotRecognizedDoc.CheckPointId });
             }
             ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id", qvNotRecognizedDoc.CheckPointId);
             return View(qvNotRecognizedDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvNotRecognizedDocs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -128,7 +156,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvNotRecognizedDoc = await _context.NotRecognizedDocs.SingleOrDefaultAsync(m => m.Id == id);
+            var qvNotRecognizedDoc = await _context.NotRecognizedDocs.Include(q=>q.CheckPoint).SingleOrDefaultAsync(m => m.Id == id);
             if (qvNotRecognizedDoc == null)
             {
                 return NotFound();
@@ -145,7 +173,7 @@ namespace qVisitor.Controllers
             var qvNotRecognizedDoc = await _context.NotRecognizedDocs.SingleOrDefaultAsync(m => m.Id == id);
             _context.NotRecognizedDocs.Remove(qvNotRecognizedDoc);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvCheckPoints", new { id = qvNotRecognizedDoc.CheckPointId });
         }
 
         private bool qvNotRecognizedDocExists(int id)

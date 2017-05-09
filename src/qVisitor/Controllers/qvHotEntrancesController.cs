@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,23 +19,25 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntrances
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
             var applicationDbContext = _context.HotEntrances.Include(q => q.Department);
+            ViewData["Reffid"] = id;
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntrances/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? reffid)
         {
+            ViewData["Reffid"] = reffid;
             if (id == null)
             {
                 return NotFound();
             }
 
-            var qvHotEntrance = await _context.HotEntrances.SingleOrDefaultAsync(m => m.Id == id);
+            var qvHotEntrance = await _context.HotEntrances.Include(q => q.HotEntranceDocs).Include(q => q.HotEntrancePhotoes).SingleOrDefaultAsync(m => m.Id == id);
             if (qvHotEntrance == null)
             {
                 return NotFound();
@@ -42,11 +45,13 @@ namespace qVisitor.Controllers
 
             return View(qvHotEntrance);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntrances/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id");
+            ViewData["Reffid"] = reffid;
+            var qvCheckPoint = _context.CheckPoints.Include(q=>q.Object).SingleOrDefault(q => q.Id == reffid);
+            ViewData["DepartmentId"] = new SelectList(_context.Departments.Where(q =>q.Branch.CityId == qvCheckPoint.Object.CityId), "Id", "Name");
             return View();
         }
 
@@ -61,15 +66,16 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvHotEntrance);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "qvCheckPoints");
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", qvHotEntrance.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", qvHotEntrance.DepartmentId);
             return View(qvHotEntrance);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntrances/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? reffid)
         {
+            ViewData["Reffid"] = reffid;
             if (id == null)
             {
                 return NotFound();
@@ -80,7 +86,7 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", qvHotEntrance.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", qvHotEntrance.DepartmentId);
             return View(qvHotEntrance);
         }
 
@@ -119,16 +125,17 @@ namespace qVisitor.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", qvHotEntrance.DepartmentId);
             return View(qvHotEntrance);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntrances/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int? reffid)
         {
+            ViewData["Reffid"] = reffid;
             if (id == null)
             {
                 return NotFound();
             }
 
-            var qvHotEntrance = await _context.HotEntrances.SingleOrDefaultAsync(m => m.Id == id);
+            var qvHotEntrance = await _context.HotEntrances.Include(q => q.Department).SingleOrDefaultAsync(m => m.Id == id);
             if (qvHotEntrance == null)
             {
                 return NotFound();

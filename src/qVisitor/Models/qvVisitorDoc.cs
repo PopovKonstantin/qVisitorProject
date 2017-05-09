@@ -17,5 +17,6 @@ namespace qVisitor.Models
         [ForeignKey("VisitorId")]
         public qvVisitor Visitor { get; set; }
 
+        public qvVisitorDoc() { }
     }
 }

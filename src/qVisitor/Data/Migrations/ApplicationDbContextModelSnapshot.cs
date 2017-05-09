@@ -282,7 +282,7 @@ namespace qVisitor.Data.Migrations
 
                     b.Property<int>("OrderId");
 
-                    b.Property<int>("VisitorId");
+                    b.Property<int?>("qvVisitorId");
 
                     b.HasKey("Id");
 
@@ -292,7 +292,7 @@ namespace qVisitor.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("VisitorId");
+                    b.HasIndex("qvVisitorId");
 
                     b.ToTable("qvEntrance");
                 });
@@ -781,10 +781,9 @@ namespace qVisitor.Data.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("qVisitor.Models.qvVisitor", "Visitor")
+                    b.HasOne("qVisitor.Models.qvVisitor")
                         .WithMany("Entrances")
-                        .HasForeignKey("VisitorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("qvVisitorId");
                 });
 
             modelBuilder.Entity("qVisitor.Models.qvEntranceDoc", b =>

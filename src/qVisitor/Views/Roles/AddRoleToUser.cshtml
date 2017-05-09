@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@model qVisitor.Models.RoleViewModels.ChangeRoleViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Изменение ролей для пользователя @Model.UserEmail</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="Roles" asp-action="Index" class="btn btn-default">Роли пользователей</a>
+        <a href="#" class="btn btn-default">Изменение ролей для пользователя @Model.UserEmail</a>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-list-alt"></i>
+                    Изменение ролей для пользователя @Model.UserEmail
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <form asp-action="AddRoleToUser" method="post">
+                        <input type="hidden" name="userId" value="@Model.UserId" />
+                        <div class="form-group">
+                            @foreach (IdentityRole role in Model.AllRoles)
+                            {
+                                <input type="checkbox" name="roles" value="@role.Name"
+                                       @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
+                            }
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Сохранить" class="btn" />
+                                <a style="color:#333;" asp-controller="Roles" asp-action="Index">
+                                    <button type="button" class="btn">Отменить</button>
+                                </a>
+                            </div>
+                        </div>
+                    </form>                      
+                </div>
+                <!-- /.row -->
+                <!-- /.row -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

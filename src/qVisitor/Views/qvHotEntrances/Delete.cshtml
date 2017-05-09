@@ -1,4 +1,4 @@
-@model qVisitor.Models.qvHotEntrance
+﻿@model qVisitor.Models.qvHotEntrance
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,80 +8,89 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">������� ������</h1>
+            <h1 class="page-header">Удалить страну</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> ������</a>
-        </li>
-        <li class="active">
-            ������� ������
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">КПП</a>
+        <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@ViewBag.Reffid" class="btn btn-default">КПП №@ViewBag.Reffid</a>
+        <a href="#" class="btn btn-default">Изменить заявку</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    ������� ������
+                    Удалить страну
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>�� ������������� ������ ������� ������?</h3>
+                    <h3>Вы действительно хотите удалить заявку на посетителя?</h3>
                     <div>
                         <dl class="dl-horizontal">
                             <dt>
-                                @Html.DisplayNameFor(model => model.Attendant)
+                                Департамент
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Attendant)
+                                @Html.DisplayFor(model => model.Department.Name)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.Comment)
+                                Фамилия
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Comment)
+                                @Html.DisplayFor(model => model.Surname)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.DocumentNumber)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.DocumentNumber)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Name)
+                                Имя
                             </dt>
                             <dd>
                                 @Html.DisplayFor(model => model.Name)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.Organization)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Organization)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Patronymic)
+                                Отчество
                             </dt>
                             <dd>
                                 @Html.DisplayFor(model => model.Patronymic)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.Surname)
+                                Номер документа
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Surname)
+                                @Html.DisplayFor(model => model.DocumentNumber)
+                            </dd>
+                            <dt>
+                                Организация
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Organization)
+                            </dd>
+
+
+
+
+                            <dt>
+                                Сопровождающий
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Attendant)
+                            </dd>
+
+                            <dt>
+                                Комментарий
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Comment)
                             </dd>
                         </dl>
 
                         <form asp-action="Delete">
                             <div class="form-actions no-color">
-                                <input type="submit" value="�������" class="btn" />
-                                <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
-                                    <button type="button" class="btn">��������</button>
+                                <input type="submit" value="Удалить" class="btn" />
+                                <a style="color:#333;" asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@ViewBag.Reffid">
+                                    <button type="button" class="btn">Отменить</button>
                                 </a>
                             </div>
                         </form>

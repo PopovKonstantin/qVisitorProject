@@ -15,6 +15,7 @@
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
         <a asp-controller="qvCompanies" asp-action="Index" class="btn btn-default">Компания</a>
+        <a asp-controller="qvCompanies" asp-action="Details" asp-route-id="@ViewBag.CompanyReff" class="btn btn-default"> Филиалы </a>
         <a asp-controller="qvBranches" asp-action="Details" asp-route-id="@Model.BranchId" class="btn btn-default"> Департаменты </a>
         <a href="#" class="btn btn-default"> Изменить название департамента</a>
     </div>

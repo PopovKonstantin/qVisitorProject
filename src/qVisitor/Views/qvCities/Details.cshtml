@@ -14,7 +14,8 @@
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
         <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
-        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID" class="btn btn-default"> Города </a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@Model.CountryID" class="btn btn-default"> @ViewBag.CountryName </a>
+        <a href="#" class="btn btn-default">@ViewBag.CityName</a>
         <a href="#" class="btn btn-default">Объекты</a>
     </div>
     <!-- /.row -->
@@ -30,7 +31,7 @@
             Html.RenderPartial("~/Views/qvObjects/Index.cshtml", Model.Objects);
         }
         <div class="well">
-            <a style="color:#333;" asp-controller="qvObjects" asp-action="Create" asp-route-reffid="@Model.Id">
+            <a style="color:#333;" asp-controller="qvObjects" asp-action="Create" asp-route-reffid="@Model.Id" asp-route-countryreff="@Model.CountryID">
                 <button class="btn">Добавить объект</button>
             </a>
         </div>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -16,16 +17,16 @@ namespace qVisitor.Controllers
 
         public qvEntrancesController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntrances
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Entrances.Include(q => q.CheckPoint).Include(q => q.EntranceType).Include(q => q.Order).Include(q => q.Visitor);
+            var applicationDbContext = _context.Entrances.Include(q => q.CheckPoint).Include(q => q.EntranceType).Include(q => q.Order).ThenInclude(q => q.RefOrderVisitors).ThenInclude(q => q.Visitor);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntrances/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -34,7 +35,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvEntrance = await _context.Entrances.SingleOrDefaultAsync(m => m.Id == id);
+            var qvEntrance = await _context.Entrances.Include(q => q.CheckPoint).Include(q => q.EntranceType).Include(q => q.Order).ThenInclude(q => q.RefOrderVisitors).ThenInclude(q => q.Visitor).Include(q=>q.EntranceDocs).Include(q=>q.EntrancePhotoes).SingleOrDefaultAsync(m => m.Id == id);
             if (qvEntrance == null)
             {
                 return NotFound();
@@ -42,14 +43,15 @@ namespace qVisitor.Controllers
 
             return View(qvEntrance);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntrances/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id");
-            ViewData["EntranceTypeId"] = new SelectList(_context.EntranceTypes, "Id", "Id");
+            ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Name", reffid);
+            ViewData["EntranceTypeId"] = new SelectList(_context.EntranceTypes, "Id", "Description");
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id");
+            ViewData["Reff"] = reffid;
+            ViewData["KPP"] = _context.CheckPoints.SingleOrDefault(q => q.Id == reffid).Name;
             return View();
         }
 
@@ -58,21 +60,20 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ActionDate,CheckPointId,EntranceTypeId,OrderId,VisitorId")] qvEntrance qvEntrance)
+        public async Task<IActionResult> Create([Bind("Id,ActionDate,CheckPointId,EntranceTypeId,OrderId")] qvEntrance qvEntrance)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(qvEntrance);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvCheckPoints", new { id = qvEntrance.CheckPointId });
             }
             ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id", qvEntrance.CheckPointId);
             ViewData["EntranceTypeId"] = new SelectList(_context.EntranceTypes, "Id", "Id", qvEntrance.EntranceTypeId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", qvEntrance.OrderId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvEntrance.VisitorId);
             return View(qvEntrance);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntrances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,10 +87,10 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id", qvEntrance.CheckPointId);
-            ViewData["EntranceTypeId"] = new SelectList(_context.EntranceTypes, "Id", "Id", qvEntrance.EntranceTypeId);
+            ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Name", qvEntrance.CheckPointId);
+            ViewData["EntranceTypeId"] = new SelectList(_context.EntranceTypes, "Id", "Description", qvEntrance.EntranceTypeId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", qvEntrance.OrderId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvEntrance.VisitorId);
+            ViewData["CPName"] = _context.CheckPoints.SingleOrDefault(q => q.Id == qvEntrance.CheckPointId).Name;
             return View(qvEntrance);
         }
 
@@ -98,7 +99,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ActionDate,CheckPointId,EntranceTypeId,OrderId,VisitorId")] qvEntrance qvEntrance)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ActionDate,CheckPointId,EntranceTypeId,OrderId")] qvEntrance qvEntrance)
         {
             if (id != qvEntrance.Id)
             {
@@ -123,15 +124,14 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvCheckPoints", new { id = qvEntrance.CheckPointId });
             }
             ViewData["CheckPointId"] = new SelectList(_context.CheckPoints, "Id", "Id", qvEntrance.CheckPointId);
             ViewData["EntranceTypeId"] = new SelectList(_context.EntranceTypes, "Id", "Id", qvEntrance.EntranceTypeId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", qvEntrance.OrderId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvEntrance.VisitorId);
             return View(qvEntrance);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntrances/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -140,12 +140,13 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvEntrance = await _context.Entrances.SingleOrDefaultAsync(m => m.Id == id);
+            var qvEntrance = await _context.Entrances.Include(q => q.CheckPoint).Include(q => q.EntranceType).Include(q => q.Order).ThenInclude(q => q.RefOrderVisitors).ThenInclude(q => q.Visitor).SingleOrDefaultAsync(m => m.Id == id);
             if (qvEntrance == null)
             {
                 return NotFound();
             }
 
+            ViewData["CPName"] = _context.CheckPoints.SingleOrDefault(q => q.Id == qvEntrance.CheckPointId).Name;
             return View(qvEntrance);
         }
 
@@ -157,7 +158,7 @@ namespace qVisitor.Controllers
             var qvEntrance = await _context.Entrances.SingleOrDefaultAsync(m => m.Id == id);
             _context.Entrances.Remove(qvEntrance);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvCheckPoints", new { id = qvEntrance.CheckPointId });
         }
 
         private bool qvEntranceExists(int id)

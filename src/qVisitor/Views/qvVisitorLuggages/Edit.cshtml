@@ -8,28 +8,24 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Изменить данные о багаже посетителя</h1>
+            <h1 class="page-header">Изменить данные о багаже посетителя @ViewBag.VisitorName</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId> Документы</a>
-        </li>
-        <li class="active">
-            Изменить данные о багаже посетителя
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvOrders" asp-action="Index" class="btn btn-default">Заявки</a>
+        <a asp-controller="qvOrders" asp-action="Details" asp-route-id="@ViewBag.RefOrdId" class="btn btn-default">Заявка № @ViewBag.RefOrdId</a>
+        <a href="#" class="btn btn-default"> Багаж</a>
+        <a href="#" class="btn btn-default"> Изменить данные о багаже посетителя @ViewBag.VisitorName</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Изменить данные о багаже посетителя
+                    Изменить данные о багаже посетителя @ViewBag.VisitorName
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -61,7 +57,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Сохранить" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId>
+                                    <a style="color:#333;" asp-controller="qvOrders" asp-action="Details" asp-route-id=@Model.OrderId>
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>

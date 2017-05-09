@@ -8,28 +8,24 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Добавить КПП</h1>
+            <h1 class="page-header">Добавить заявку</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
-        </li>
-        <li>
-            <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.CheckPointId"> Заявленные посещения </a>
-        </li>
-        <li class="active">
-            Удалить данные по посещениям
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">КПП</a>
+        <a href="#" class="btn btn-default">@ViewBag.KPP</a>
+        <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@ViewBag.Reff" class="btn btn-default"> Заявленные посещения </a>
+        <a href="#" class="btn btn-default">Добавить заявку</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Добавить страну
+                    Добавить заявку
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -37,40 +33,42 @@
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="CheckPointId" class="col-md-2 control-label">Номер КПП</label>
+                                <label asp-for="CheckPointId" class="col-md-2 control-label">КПП</label>
                                 <div class="col-md-10">
                                     <select asp-for="CheckPointId" class="form-control" asp-items="ViewBag.CheckPointId"></select>
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label asp-for="EntranceTypeId" class="col-md-2 control-label">Номер типа заявки</label>
+                                <label asp-for="EntranceTypeId" class="col-md-2 control-label">Тип посещения</label>
                                 <div class="col-md-10">
-                                    <select asp-for="EntranceTypeId" class="form-control" asp-items="ViewBag.EntranceTypeId"></select>
+                                    <div class="input-group">
+                                        <select asp-for="EntranceTypeId" class="form-control" asp-items="ViewBag.EntranceTypeId"></select>
+                                        <div class="input-group-btn ">
+                                            <a asp-controller="qvEntranceTypes" asp-action="Index" onclick="return showModal(this);">
+                                                <button type="button" class="btn btn-default glyphicon glyphicon-cog" style="margin-top:-1px;" id="AdvertiserEditButton"></button>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="OrderId" class="col-md-2 control-label">Номер заявки</label>
+                                <label asp-for="OrderId" class="col-md-2 control-label">Заявка</label>
                                 <div class="col-md-10">
                                     <select asp-for="OrderId" class="form-control" asp-items="ViewBag.OrderId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="VisitorId" class="col-md-2 control-label">Номер посетителя</label>
-                                <div class="col-md-10">
-                                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label asp-for="ActionDate" class="col-md-2 control-label">Дата посещения</label>
                                 <div class="col-md-10">
-                                    <input type="datetime" asp-for="ActionDate" class="form-control" />
+                                    <input type="date" asp-for="ActionDate" class="form-control" />
                                     <span asp-validation-for="ActionDate" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Создать" class="btn" />
-                                    <a style="color:#333;" asp-controller="Admin" asp-action="Countries">
+                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Details" asp-route-id="@ViewBag.Reff">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>
@@ -119,3 +117,59 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<style>
+    .modal-window {
+        display: none;
+        position: absolute;
+        z-index: 100;
+        background: #f8f8f8;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px #000000;
+        left: 30%;
+        top: 30%;
+        width: 830px;
+        height: 600px;
+    }
+
+    .modal-window-close {
+        position: absolute;
+        font-size: 20px;
+        cursor: pointer;
+        right: 4px;
+        top: 4px;
+    }
+
+    .modal-window-title {
+        text-align: center;
+        height: 20px;
+    }
+
+    .modal-window-content {
+        width: 800px;
+        height: 600px;
+        padding: 5px;
+    }
+</style>
+
+<script type="text/javascript">
+    function showModal(self) {
+        var modal = document.getElementById('modalWindow');
+        var iframe = modal.getElementsByTagName('iframe')[0];
+        iframe.src = self.href;
+        modal.style.display = 'block';
+        return false;
+    }
+</script>
+
+<div id="modalWindow" class="modal-window">
+    <div class="modal-window-close" onclick="this.parentNode.style.display='none';">X</div>
+    <div class="modal-window-title"> </div>
+    <div class="modal-window-content">
+        <iframe src="about:blank" frameborder="0" style="width:800px;height:570px;"></iframe>
+    </div>
+</div>    
+
+
+

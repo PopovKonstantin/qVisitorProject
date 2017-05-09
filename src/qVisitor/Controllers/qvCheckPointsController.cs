@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +19,15 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-        [Route("CheckPoints")]
+
+        [Authorize(Roles = "Охрана")]
         // GET: qvCheckPoints
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.CheckPoints.Include(q => q.Object);
             return View(await applicationDbContext.ToListAsync());
         }
-        [Route("CheckPoints/Details/{id}")]
+        [Authorize(Roles = "Охрана")]
         // GET: qvCheckPoints/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -34,7 +36,12 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvCheckPoint = await _context.CheckPoints.Include(e => e.Entrances).Include(nr => nr.NotRecognizedDocs).SingleOrDefaultAsync(m => m.Id == id);
+            var qvCheckPoint = await _context.CheckPoints.Include(q => q.NotRecognizedDocs).Include(q => q.Entrances).ThenInclude(q=> q.EntranceType).
+                Include(q => q.Entrances).ThenInclude(q => q.Order).ThenInclude(q => q.RefOrderVisitors).ThenInclude(q => q.Visitor).
+                Include(q=>q.Object).ThenInclude(q=>q.City).ThenInclude(q=>q.Country).ThenInclude(q => q.Companies).ThenInclude(q => q.Branches).ThenInclude(q => q.Departments).ThenInclude(q => q.HotEntrances).
+                SingleOrDefaultAsync(m => m.Id == id);
+
+            ViewData["HotEntrances"] = new SelectList(_context.HotEntrances.Where(q => q.Department.Branch.CityId == qvCheckPoint.Object.CityId), "Id", "Id");
             if (qvCheckPoint == null)
             {
                 return NotFound();
@@ -42,11 +49,12 @@ namespace qVisitor.Controllers
 
             return View(qvCheckPoint);
         }
-        [Route("CheckPoints/Create")]
+        [Authorize(Roles = "Охрана")]
         // GET: qvCheckPoints/Create
         public IActionResult Create()
         {
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id");
+            ViewData["ObjectId"] = new SelectList((from s in _context.Objects
+                                                   select new { Id = s.Id, Name = s.Name }), "Id", "Name");
             return View();
         }
 
@@ -66,7 +74,7 @@ namespace qVisitor.Controllers
             ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id", qvCheckPoint.ObjectId);
             return View(qvCheckPoint);
         }
-        [Route("CheckPoints/Edit/{id}")]
+        [Authorize(Roles = "Охрана")]
         // GET: qvCheckPoints/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -80,7 +88,8 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id", qvCheckPoint.ObjectId);
+            ViewData["ObjectId"] = new SelectList((from s in _context.Objects
+                                                   select new { Id = s.Id, Name = s.Name }), "Id", "Name", qvCheckPoint.ObjectId);
             return View(qvCheckPoint);
         }
 
@@ -116,10 +125,11 @@ namespace qVisitor.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id", qvCheckPoint.ObjectId);
+            ViewData["ObjectId"] = new SelectList((from s in _context.Objects
+                                                   select new { Id = s.Id, Name = s.Name }), "Id", "Name", qvCheckPoint.ObjectId);
             return View(qvCheckPoint);
         }
-        [Route("CheckPoints/Delete/{id}")]
+        [Authorize(Roles = "Охрана")]
         // GET: qvCheckPoints/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -128,7 +138,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvCheckPoint = await _context.CheckPoints.SingleOrDefaultAsync(m => m.Id == id);
+            var qvCheckPoint = await _context.CheckPoints.Include(q => q.Object).SingleOrDefaultAsync(m => m.Id == id);
             if (qvCheckPoint == null)
             {
                 return NotFound();

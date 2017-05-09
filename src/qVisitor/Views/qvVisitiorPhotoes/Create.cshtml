@@ -8,57 +8,53 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Добавить страну</h1>
+            <h1 class="page-header">Создать фотографию</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li class="active">
-            Создать фотографию
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvVisitors" asp-action="Index" class="btn btn-default">Посетители</a>
+        <a asp-controller="qvVisitors" asp-action="Details" asp-route-id="@ViewBag.Reff" class="btn btn-default"> Фотография </a>
+        <a href="#" class="btn btn-default"> Создать фотографию</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Добавить страну
+                    Создать фотографию
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <form asp-action="Create">
+                    <form asp-action="Create" enctype="multipart/form-data">
                         <div class="form-horizontal">
-                            <h4>qvVisitiorPhoto</h4>
-                            <hr />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="VisitorId" class="col-md-2 control-label">Номер посетителя</label>
+                            <div class="form-group hidden">
+                                <label asp-for="VisitorId" class="col-md-2 control-label">Посетитель</label>
                                 <div class="col-md-10">
                                     <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Photo" class="col-md-2 control-label">Фотография</label>
-                                <div class="col-md-10">
-                                    <input asp-for="Photo" class="form-control" />
+                                <div class="col-md-10" style="border:none;">
+                                    <input type="file" asp-for="Photo" class="form-control" />
                                     <span asp-validation-for="Photo" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label asp-for="PhotoDate" class="col-md-2 control-label">Дата</label>
                                 <div class="col-md-10">
-                                    <input asp-for="PhotoDate" class="form-control" />
+                                    <input type="date" asp-for="PhotoDate" class="form-control" value="@DateTime.Today" />
                                     <span asp-validation-for="PhotoDate" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Создать" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvVisitors" asp-action="Index">
+                                    <a style="color:#333;" asp-controller="qvVisitors" asp-action="Details" asp-route-id="@ViewBag.Reff">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>

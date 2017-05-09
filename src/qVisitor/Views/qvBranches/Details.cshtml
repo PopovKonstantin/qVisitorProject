@@ -25,11 +25,25 @@
                 @{
                     Html.RenderPartial("~/Views/qvDepartments/Index.cshtml", Model.Departments);
                 }
+                <div class="well">
+                    <a style="color:#333;" asp-controller="qvDepartments" asp-action="Create" asp-route-reffid="@Model.Id" asp-route-companyreff="@Model.CompanyId">
+                        <button type="button" class="btn">Добавить департамент</button>
+                    </a>
+                </div>
             </div>
+            <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
     </div>
     <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<!-- /.row -->
+            </div>
+        </div>
+<!-- /.panel -->
+    </div>
+<!-- /.col-lg-12 -->
 </div>
 
 <!-- jQuery -->
@@ -50,9 +64,9 @@
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#dataTables-example').DataTable({
-                responsive: true
+            responsive: true
         });
     });
 </script>

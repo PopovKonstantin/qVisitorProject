@@ -8,18 +8,16 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Изменить страну</h1>
+            <h1 class="page-header">Изменить КПП</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
-        </li>
-        <li class="active">
-            Изменить КПП
-        </li>
-    </ol>
+
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">Страны</a>
+        <a href="#" class="btn btn-default">Изменить КПП</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -35,14 +33,14 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
-                                <label asp-for="ObjectId" class="control-label col-md-2">Номер объекта</label>
+                                <label asp-for="ObjectId" class="control-label col-md-2">Объект</label>
                                 <div class="col-md-10">
                                     <select asp-for="ObjectId" class="form-control" asp-items="ViewBag.ObjectId"></select>
                                     <span asp-validation-for="ObjectId" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Name" class="col-md-2 control-label">Название КПП</label>
+                                <label asp-for="Name" class="col-md-2 control-label">КПП</label>
                                 <div class="col-md-10">
                                     <input asp-for="Name" class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" />
@@ -51,7 +49,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Сохранить" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
+                                    <a style="color:#333;" asp-controller="qvCheckPoints" asp-action="Index">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>

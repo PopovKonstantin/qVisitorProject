@@ -12,17 +12,12 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId> Документы</a>
-        </li>
-        <li class="active">
-            Изменить данные результатов сканирования
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvVisitors" asp-action="Index" class="btn btn-default">Посетители</a>
+        <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId class="btn btn-default"> Результаты сканирования </a>
+        <a href="#" class="btn btn-default"> Изменить данные результатов сканирования</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -33,12 +28,12 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <form asp-action="Edit">
+                    <form asp-action="Edit" enctype="multipart/form-data">
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
-                            <div class="form-group">
-                                <label asp-for="VisitorId" class="control-label col-md-2">Номер посетителя</label>
+                            <div class="form-group hidden">
+                                <label asp-for="VisitorId" class="control-label col-md-2">Посетитель</label>
                                 <div class="col-md-10">
                                     <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
                                     <span asp-validation-for="VisitorId" class="text-danger" />
@@ -47,7 +42,7 @@
                             <div class="form-group">
                                 <label asp-for="Scan" class="col-md-2 control-label">Результат сканирования</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Scan" class="form-control" />
+                                    <input type="file" asp-for="Scan" class="form-control" />
                                     <span asp-validation-for="Scan" class="text-danger" />
                                 </div>
                             </div>

@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +21,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitiorPhotoes
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.VisitorPhotos.Include(q => q.Visitor);
-            return PartialView(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.ToListAsync());
         }
-        [Route("Visitors/Photoes/Details/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitiorPhotoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,31 +45,46 @@ namespace qVisitor.Controllers
 
             return View(qvVisitiorPhoto);
         }
-        [Route("Visitors/Photoes/Create")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitiorPhotoes/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id");
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors select
+                           new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName",reffid);
+            ViewData["Reff"] = reffid;
             return View();
         }
-
+        
         // POST: qvVisitiorPhotoes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Photo,PhotoDate,VisitorId")] qvVisitiorPhoto qvVisitiorPhoto)
+        public async Task<IActionResult> Create([Bind("Id,PhotoDate,VisitorId")] qvVisitiorPhoto qvVisitiorPhoto, IFormFile Photo)
         {
             if (ModelState.IsValid)
             {
+                if (Photo != null)
+                {
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(Photo.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)Photo.Length);
+                    }
+                    // установка массива байтов
+                    qvVisitiorPhoto.Photo = imageData;
+                }
+
                 _context.Add(qvVisitiorPhoto);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvVisitors", new { id = qvVisitiorPhoto.VisitorId});
             }
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitiorPhoto.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors select
+                           new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", qvVisitiorPhoto.VisitorId);
             return View(qvVisitiorPhoto);
         }
-        [Route("Visitors/Photoes/Edit/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitiorPhotoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -80,7 +98,8 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitiorPhoto.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors select
+                           new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", qvVisitiorPhoto.VisitorId);
             return View(qvVisitiorPhoto);
         }
 
@@ -89,7 +108,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Photo,PhotoDate,VisitorId")] qvVisitiorPhoto qvVisitiorPhoto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PhotoDate,VisitorId")] qvVisitiorPhoto qvVisitiorPhoto, IFormFile Photo)
         {
             if (id != qvVisitiorPhoto.Id)
             {
@@ -100,6 +119,17 @@ namespace qVisitor.Controllers
             {
                 try
                 {
+                    if (Photo != null)
+                    {
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(Photo.OpenReadStream()))
+                        {
+                            imageData = binaryReader.ReadBytes((int)Photo.Length);
+                        }
+                        // установка массива байтов
+                        qvVisitiorPhoto.Photo = imageData;
+                    }
                     _context.Update(qvVisitiorPhoto);
                     await _context.SaveChangesAsync();
                 }
@@ -114,12 +144,13 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvVisitors", new { id = qvVisitiorPhoto.VisitorId });
             }
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitiorPhoto.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors select
+                                        new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", qvVisitiorPhoto.VisitorId);
             return View(qvVisitiorPhoto);
         }
-        [Route("Visitors/Photoes/Delete/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitiorPhotoes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -145,7 +176,7 @@ namespace qVisitor.Controllers
             var qvVisitiorPhoto = await _context.VisitorPhotos.SingleOrDefaultAsync(m => m.Id == id);
             _context.VisitorPhotos.Remove(qvVisitiorPhoto);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvVisitors", new { id = qvVisitiorPhoto.VisitorId });
         }
 
         private bool qvVisitiorPhotoExists(int id)

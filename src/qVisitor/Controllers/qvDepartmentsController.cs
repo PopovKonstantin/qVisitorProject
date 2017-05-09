@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,7 +19,7 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Администратор")]
         // GET: qvDepartments
         public async Task<IActionResult> Index()
         {
@@ -26,6 +27,7 @@ namespace qVisitor.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
         [Route("Companies/Branches/Departments/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvDepartments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,15 +46,23 @@ namespace qVisitor.Controllers
         }
 
         [Route("Companies/Branches/Departments/Create")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvDepartments/Create
-        public IActionResult Create(int? reffid)
+        public IActionResult Create(int? reffid, int? companyreff)
         {
             if (reffid == null)
             {
                 return NotFound();
             }
+
+            if (companyreff == null)
+            {
+                return NotFound();
+            }
+
             ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", reffid);
             ViewData["Reff"] = reffid;
+            ViewData["CompanyReff"] = companyreff;
             return View();
         }
 
@@ -74,6 +84,7 @@ namespace qVisitor.Controllers
             return View(qvDepartment);
         }
         [Route("Companies/Branches/Departments/Edit/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvDepartments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -82,11 +93,12 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvDepartment = await _context.Departments.SingleOrDefaultAsync(m => m.Id == id);
+            var qvDepartment = await _context.Departments.Include(b=>b.Branch).SingleOrDefaultAsync(m => m.Id == id);
             if (qvDepartment == null)
             {
                 return NotFound();
             }
+            ViewData["CompanyReff"] = qvDepartment.Branch.CompanyId;
             ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", qvDepartment.BranchId);
             return View(qvDepartment);
         }
@@ -128,6 +140,7 @@ namespace qVisitor.Controllers
             return View(qvDepartment);
         }
         [Route("Companies/Branches/Departments/Delete/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvDepartments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -136,12 +149,12 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvDepartment = await _context.Departments.SingleOrDefaultAsync(m => m.Id == id);
+            var qvDepartment = await _context.Departments.Include(b => b.Branch).SingleOrDefaultAsync(m => m.Id == id);
             if (qvDepartment == null)
             {
                 return NotFound();
             }
-
+            ViewData["CompanyReff"] = qvDepartment.Branch.CompanyId;
             return View(qvDepartment);
         }
 

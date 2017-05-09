@@ -12,14 +12,13 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li class="active">
-            Добавить данные о багаже посетителя
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvOrders" asp-action="Index" class="btn btn-default">Заявки</a>
+        <a asp-controller="qvOrders" asp-action="Details" asp-route-id="@ViewBag.RefOrdId" class="btn btn-default">Заявка № @ViewBag.RefOrdId</a>
+        <a href="#" class="btn btn-default"> Багаж</a>
+        <a href="#" class="btn btn-default"> Добавить данные о багаже посетителя</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -30,17 +29,17 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <form asp-action="Create">
+                    <form asp-controller="qvVisitorLuggages" asp-action="Create">
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
+                            <div class="form-group hidden">
                                 <label asp-for="OrderId" class="col-md-2 control-label">Номер заявки</label>
                                 <div class="col-md-10">
                                     <select asp-for="OrderId" class="form-control" asp-items="ViewBag.OrderId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="VisitorId" class="col-md-2 control-label">Номер посетителя</label>
+                                <label asp-for="VisitorId" class="col-md-2 control-label">Посетитель</label>
                                 <div class="col-md-10">
                                     <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
                                 </div>
@@ -55,7 +54,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Создать" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvVisitors" asp-action="Index">
+                                    <a style="color:#333;" asp-controller="qvOrders" asp-action="Details" asp-route-id=@ViewBag.RefOrdId>
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>

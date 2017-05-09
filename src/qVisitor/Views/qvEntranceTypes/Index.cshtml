@@ -1,29 +1,25 @@
-@model IEnumerable<qVisitor.Models.qvEntranceType>
+п»ї@model IEnumerable<qVisitor.Models.qvEntranceType>
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_RegLayout.cshtml";
 }
-
-
-<div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Страны</h1>
+            <h1 class="page-header">РўРёРїС‹ РїРѕСЃРµС‰РµРЅРёР№</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li class="active">
-            Страны
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a href="#" class="btn btn-default">РўРёРїС‹ РїРѕСЃРµС‰РµРЅРёР№</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Список стран
+                    РЎРїРёСЃРѕРє С‚РёРїРѕРІ РїРѕСЃРµС‰РµРЅРёР№
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -37,7 +33,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Description)
                                     </th>
-                                    <th></th>
+                                    <th>
+                                        Р”РµР№СЃС‚РІРёСЏ
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,9 +49,8 @@
                                             @Html.DisplayFor(modelItem => item.Description)
                                         </td>
                                         <td>
-                                            <a style="color:#333;" asp-controller="qvCountries" asp-action="Details" asp-route-id="@item.Id"><button class="btn">Просмотр</button></a>
-                                            <a style="color:#333;" asp-controller="qvCountries" asp-action="Edit" asp-route-id="@item.Id"><button class="btn">Изменить</button></a>
-                                            <a style="color:#333;" asp-controller="qvCountries" asp-action="Delete" asp-route-id="@item.Id"><button class="btn">Удалить</button></a>
+                                            <a style="color:#333;" asp-controller="qvEntranceTypes" asp-action="Edit" asp-route-id="@item.Id"><button class="btn">РР·РјРµРЅРёС‚СЊ</button></a>
+                                            <a style="color:#333;" asp-controller="qvEntranceTypes" asp-action="Delete" asp-route-id="@item.Id"><button class="btn">РЈРґР°Р»РёС‚СЊ</button></a>
                                         </td>
                                     </tr>
                                 }
@@ -62,8 +59,8 @@
                     </div>
                     <!-- /.table-responsive -->
                     <div class="well">
-                        <a style="color:#333;" asp-controller="qvCountries" asp-action="Create">
-                            <button type="button" class="btn">Добавить страну</button>
+                        <a style="color:#333;" asp-controller="qvEntranceTypes" asp-action="Create">
+                            <button type="button" class="btn">Р”РѕР±Р°РІРёС‚СЊ С‚РёРї</button>
                         </a>
                     </div>
                 </div>
@@ -76,7 +73,6 @@
     <!-- /.row -->
     <!-- /.row -->
 
-</div>
 <!-- /.col-lg-6 -->
 <!-- jQuery -->
 <script src="~/bower_components/jquery/dist/jquery.min.js"></script>

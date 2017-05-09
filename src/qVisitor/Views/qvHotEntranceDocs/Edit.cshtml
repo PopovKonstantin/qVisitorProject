@@ -1,4 +1,4 @@
-@model qVisitor.Models.qvHotEntranceDoc
+﻿@model qVisitor.Models.qvHotEntranceDoc
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,53 +8,50 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">�������� ������</h1>
+            <h1 class="page-header">Изменить страну</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> ������</a>
-        </li>
-        <li class="active">
-            �������� ������
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">КПП</a>
+        <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@ViewBag.Reffid" class="btn btn-default">КПП №@ViewBag.Reffid</a>
+        <a href="#" class="btn btn-default">Регистрация незаявленного посетителя</a>
+        <a asp-controller="qvHotEntrances" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-default">@ViewBag.FullName</a>
+        <a href="#" class="btn btn-default">Изменить сканирование документа</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    �������� �������� ������
+                    Изменить название страны
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <form asp-action="Edit">
+                    <form asp-action="Edit" enctype="multipart/form-data">
                         <div class="form-horizontal">
-                            <h4>qvHotEntranceDoc</h4>
-                            <hr />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />
                             <div class="form-group">
-                                <label asp-for="Document" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <input asp-for="Document" class="form-control" />
-                                    <span asp-validation-for="Document" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="HotEntranceId" class="control-label col-md-2"></label>
+                                <label asp-for="HotEntranceId" class="control-label col-md-2">Незаявленный посетитель</label>
                                 <div class="col-md-10">
                                     <select asp-for="HotEntranceId" class="form-control" asp-items="ViewBag.HotEntranceId"></select>
                                     <span asp-validation-for="HotEntranceId" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label asp-for="Document" class="col-md-2 control-label">Сканирование документа</label>
+                                <div class="col-md-10">
+                                    <input type="file" asp-for="Document" class="form-control" />
+                                    <span asp-validation-for="Document" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="���������" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
-                                        <button type="button" class="btn">��������</button>
+                                    <input type="submit" value="Сохранить" class="btn" />
+                                    <a style="color:#333;" asp-controller="qvHotEntrances" asp-action="Details" asp-route-id="@Model.Id">
+                                        <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>
                             </div>

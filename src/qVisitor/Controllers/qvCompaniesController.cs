@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -19,6 +20,7 @@ namespace qVisitor.Controllers
             _context = context;    
         }
         [Route("Companies")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvCompanies
         public async Task<IActionResult> Index()
         {
@@ -26,6 +28,7 @@ namespace qVisitor.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
         [Route("Companies/{id}/Branches")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvCompanies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,6 +46,7 @@ namespace qVisitor.Controllers
             return View(qvCompany);
         }
         [Route("Companies/Create")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvCompanies/Create
         public IActionResult Create()
         {
@@ -68,6 +72,7 @@ namespace qVisitor.Controllers
             return View(qvCompany);
         }
         [Route("Companies/Edit/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvCompanies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -122,6 +127,7 @@ namespace qVisitor.Controllers
             return View(qvCompany);
         }
         [Route("Companies/Delete/{id}")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvCompanies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

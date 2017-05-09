@@ -42,8 +42,8 @@
     },
     "Microsoft.EntityFrameworkCore": "1.0.0",
     "Microsoft.EntityFrameworkCore.Sqlite": "1.0.0",
-    "Microsoft.EntityFrameworkCore.Sqlite.Design": "1.0.0"
-  },
+    "Microsoft.EntityFrameworkCore.Sqlite.Design": "1.0.0",
+    "MailKit": "1.16.1"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",

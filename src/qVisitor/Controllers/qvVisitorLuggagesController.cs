@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +19,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorLuggages
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.VisitorLuggages.Include(q => q.Order).Include(q => q.Visitor);
-            return PartialView(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.ToListAsync());
         }
-        [Route("Visitors/Luggages/Details/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorLuggages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,12 +43,22 @@ namespace qVisitor.Controllers
 
             return View(qvVisitorLuggage);
         }
-        [Route("Visitors/Luggages/Create")]
+
         // GET: qvVisitorLuggages/Create
-        public IActionResult Create()
+        [Authorize(Roles = "Менеджер")]
+        public IActionResult Create(int? ordid)
         {
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id");
+            if (ordid == null)
+            {
+                return NotFound();
+            }
+            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", ordid);
+            ViewData["VisitorId"] = new SelectList((from s in _context.refOrderVisitor.Include(q => q.Order).Include(q => q.Visitor)
+                                                    where s.OrderId == ordid
+                                                    select
+new { Id = s.Visitor.Id, FullName = s.Visitor.surname + " " + s.Visitor.name + " " + s.Visitor.patronymic }), "Id", "FullName");
+
+            ViewData["RefOrdId"] = ordid;
             return View();
         }
 
@@ -62,13 +73,19 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvVisitorLuggage);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvOrders", new { id = qvVisitorLuggage.OrderId });
             }
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", qvVisitorLuggage.OrderId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitorLuggage.VisitorId);
-            return View(qvVisitorLuggage);
+            ViewData["VisitorId"] = new SelectList((from s in _context.refOrderVisitor.Include(q => q.Order).Include(q => q.Visitor)
+                                                    where s.OrderId == qvVisitorLuggage.OrderId
+            select
+new { Id = s.Visitor.Id, FullName = s.Visitor.surname + " " + s.Visitor.name + " " + s.Visitor.patronymic }), "Id", "FullName");
+            ViewData["RefOrdId"] = qvVisitorLuggage.OrderId;
+            ViewData["RefVisId"] = qvVisitorLuggage.VisitorId;
+            return RedirectToAction("Create", "qvVisitorLuggages", new { visid = qvVisitorLuggage.VisitorId, ordid = qvVisitorLuggage.OrderId });
         }
-        [Route("Visitors/Luggages/Edit/{id}")]
+
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorLuggages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -83,7 +100,17 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", qvVisitorLuggage.OrderId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitorLuggage.VisitorId);
+
+            ViewData["VisitorId"] = new SelectList((from s in _context.refOrderVisitor.Include(q => q.Order).Include(q => q.Visitor)
+                                                    where s.OrderId == qvVisitorLuggage.OrderId
+                                                    select
+           new { Id = s.Visitor.Id, FullName = s.Visitor.surname + " " + s.Visitor.name + " " + s.Visitor.patronymic }), "Id", "FullName");
+            ViewData["RefOrdId"] = qvVisitorLuggage.OrderId;
+            ViewData["RefVisId"] = qvVisitorLuggage.VisitorId;
+            var cn = from c in _context.Visitors
+                     where c.Id == qvVisitorLuggage.VisitorId
+                     select new { FullName = c.surname + " " + c.name + " " + c.patronymic };
+            ViewData["VisitorName"] = cn.Select(e => e.FullName).ToList()[0];
             return View(qvVisitorLuggage);
         }
 
@@ -117,13 +144,22 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvOrders", new { id = qvVisitorLuggage.OrderId });
             }
+            ViewData["RefOrdId"] = qvVisitorLuggage.OrderId;
+            ViewData["RefVisId"] = qvVisitorLuggage.VisitorId;
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", qvVisitorLuggage.OrderId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitorLuggage.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.refOrderVisitor.Include(q => q.Order).Include(q => q.Visitor)
+                                                    where s.OrderId == qvVisitorLuggage.OrderId
+                                                    select
+            new { Id = s.Visitor.Id, FullName = s.Visitor.surname + " " + s.Visitor.name + " " + s.Visitor.patronymic }), "Id", "FullName");
+            var cn = from c in _context.Visitors
+                     where c.Id == qvVisitorLuggage.VisitorId
+                     select new { FullName = c.surname + " " + c.name + " " + c.patronymic };
+            ViewData["VisitorName"] = cn.Select(e => e.FullName).ToList()[0];
             return View(qvVisitorLuggage);
         }
-        [Route("Visitors/Luggages/Delete/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorLuggages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -137,7 +173,12 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["RefOrdId"] = qvVisitorLuggage.OrderId;
+            ViewData["RefVisId"] = qvVisitorLuggage.VisitorId;
+            var cn = from c in _context.Visitors
+                     where c.Id == qvVisitorLuggage.VisitorId
+                     select new { FullName = c.surname + " " + c.name + " " + c.patronymic };
+            ViewData["VisitorName"] = cn.Select(e => e.FullName).ToList()[0];
             return View(qvVisitorLuggage);
         }
 
@@ -149,7 +190,7 @@ namespace qVisitor.Controllers
             var qvVisitorLuggage = await _context.VisitorLuggages.SingleOrDefaultAsync(m => m.Id == id);
             _context.VisitorLuggages.Remove(qvVisitorLuggage);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvOrders", new { id = qvVisitorLuggage.OrderId });
         }
 
         private bool qvVisitorLuggageExists(int id)

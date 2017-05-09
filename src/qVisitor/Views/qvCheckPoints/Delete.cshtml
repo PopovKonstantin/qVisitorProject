@@ -12,14 +12,11 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCheckPoints" asp-action="Index"> КПП</a>
-        </li>
-        <li class="active">
-            Удалить КПП
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">Страны</a>
+        <a href="#" class="btn btn-default">Удалить КПП</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -30,7 +27,7 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>Вы действительно хотите удалить запись?</h3>
+                    <h3>Вы действительно хотите удалить @Html.DisplayFor(model => model.Name) объекта @Html.DisplayFor(model => model.Object.Name)?</h3>
                     <div>
                         <dl class="dl-horizontal">
                             <dt>

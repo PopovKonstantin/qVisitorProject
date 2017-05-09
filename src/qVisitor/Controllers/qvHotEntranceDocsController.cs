@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +22,15 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntranceDocs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? reffid)
         {
+            ViewData["Reffid"] = reffid;
             var applicationDbContext = _context.qvHotEntranceDoc.Include(q => q.HotEntrance);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntranceDocs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,11 +47,17 @@ namespace qVisitor.Controllers
 
             return View(qvHotEntranceDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntranceDocs/Create
-        public IActionResult Create()
+        public IActionResult Create(int? myid, int? reffid)
         {
-            ViewData["HotEntranceId"] = new SelectList(_context.HotEntrances, "Id", "Id");
+            ViewData["HotEntranceId"] = new SelectList((from s in _context.HotEntrances
+                                                        select
+new { Id = s.Id, FullName = s.Surname + " " + s.Name + " " + s.Patronymic }), "Id", "FullName", myid);
+            ViewData["Reffid"] = reffid;
+            ViewData["Myid"] = myid;
+            var qvHotEntrance = _context.HotEntrances.SingleOrDefault(q => q.Id == myid);
+            ViewData["FullName"] = qvHotEntrance.Surname + " "+ qvHotEntrance.Name + " "+ qvHotEntrance.Patronymic;
             return View();
         }
 
@@ -55,32 +66,63 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Document,HotEntranceId")] qvHotEntranceDoc qvHotEntranceDoc)
+        public async Task<IActionResult> Create([Bind("Id,HotEntranceId")] qvHotEntranceDoc qvHotEntranceDoc, IFormFile Document)
         {
             if (ModelState.IsValid)
             {
+                if (Document != null)
+                {
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(Document.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)Document.Length);
+                    }
+                    // установка массива байтов
+                    qvHotEntranceDoc.Document = imageData;
+                }
+
                 _context.Add(qvHotEntranceDoc);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Index", "qvCheckPoints");
             }
             ViewData["HotEntranceId"] = new SelectList(_context.HotEntrances, "Id", "Id", qvHotEntranceDoc.HotEntranceId);
             return View(qvHotEntranceDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntranceDocs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            var a = Request.Headers["Referer"].ToString();
+            string pat = @"=\d+";
+            Regex reg = new Regex(pat);
+            Match mat = reg.Match(a);
+            List<Group> LG = new List<Group>();
+            while (mat.Success)
+            {
+                LG.Add(mat.Groups[0]);
+                mat = mat.NextMatch();
+            }
+            ViewData["Reffid"] = LG[0].Value[LG[0].Value.Length-1];
             if (id == null)
             {
                 return NotFound();
             }
 
-            var qvHotEntranceDoc = await _context.qvHotEntranceDoc.SingleOrDefaultAsync(m => m.Id == id);
+            var qvHotEntranceDoc = await _context.qvHotEntranceDoc.Include(q => q.HotEntrance).SingleOrDefaultAsync(m => m.Id == id);
+            
+            //ViewData["Reffid"] = reffid;
+            ViewData["FullName"] = qvHotEntranceDoc.HotEntrance.Surname + " " + qvHotEntranceDoc.HotEntrance.Name + " " + qvHotEntranceDoc.HotEntrance.Patronymic;
+
             if (qvHotEntranceDoc == null)
             {
                 return NotFound();
             }
-            ViewData["HotEntranceId"] = new SelectList(_context.HotEntrances, "Id", "Id", qvHotEntranceDoc.HotEntranceId);
+            ViewData["HotEntranceId"] = new SelectList((from s in _context.HotEntrances
+                                                        select
+new { Id = s.Id, FullName = s.Surname + " " + s.Name + " " + s.Patronymic }), "Id", "FullName", id);
             return View(qvHotEntranceDoc);
         }
 
@@ -89,17 +131,27 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Document,HotEntranceId")] qvHotEntranceDoc qvHotEntranceDoc)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,HotEntranceId")] qvHotEntranceDoc qvHotEntranceDoc, IFormFile Document)
         {
             if (id != qvHotEntranceDoc.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (Document != null)
+                    {
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(Document.OpenReadStream()))
+                        {
+                            imageData = binaryReader.ReadBytes((int)Document.Length);
+                        }
+                        // установка массива байтов
+                        qvHotEntranceDoc.Document = imageData;
+                    }
                     _context.Update(qvHotEntranceDoc);
                     await _context.SaveChangesAsync();
                 }
@@ -114,21 +166,34 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                //return Redirect(Request.Headers["Referer"].ToString());
+                return RedirectToAction("Index", "qvCheckPoints");
             }
             ViewData["HotEntranceId"] = new SelectList(_context.HotEntrances, "Id", "Id", qvHotEntranceDoc.HotEntranceId);
             return View(qvHotEntranceDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvHotEntranceDocs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var a = Request.Headers["Referer"].ToString();
+            string pat = @"=\d+";
+            Regex reg = new Regex(pat);
+            Match mat = reg.Match(a);
+            List<Group> LG = new List<Group>();
+            while (mat.Success)
+            {
+                LG.Add(mat.Groups[0]);
+                mat = mat.NextMatch();
+            }
+            ViewData["Reffid"] = LG[0].Value[LG[0].Value.Length - 1];
             if (id == null)
             {
                 return NotFound();
             }
 
-            var qvHotEntranceDoc = await _context.qvHotEntranceDoc.SingleOrDefaultAsync(m => m.Id == id);
+            var qvHotEntranceDoc = await _context.qvHotEntranceDoc.Include(q => q.HotEntrance).SingleOrDefaultAsync(m => m.Id == id);
+            ViewData["FullName"] = qvHotEntranceDoc.HotEntrance.Surname + " " + qvHotEntranceDoc.HotEntrance.Name + " " + qvHotEntranceDoc.HotEntrance.Patronymic;
             if (qvHotEntranceDoc == null)
             {
                 return NotFound();
@@ -142,10 +207,10 @@ namespace qVisitor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var qvHotEntranceDoc = await _context.qvHotEntranceDoc.SingleOrDefaultAsync(m => m.Id == id);
+            var qvHotEntranceDoc = await _context.qvHotEntranceDoc.Include(q => q.HotEntrance).SingleOrDefaultAsync(m => m.Id == id);
             _context.qvHotEntranceDoc.Remove(qvHotEntranceDoc);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "qvCheckPoints");
         }
 
         private bool qvHotEntranceDocExists(int id)

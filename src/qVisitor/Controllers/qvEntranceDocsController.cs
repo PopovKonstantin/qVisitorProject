@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +21,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntranceDocs
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.EntranceDocs.Include(q => q.Entrance);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntranceDocs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,11 +45,15 @@ namespace qVisitor.Controllers
 
             return View(qvEntranceDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntranceDocs/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["EntranceId"] = new SelectList(_context.Entrances, "Id", "Id");
+            var applicationDbContext = _context.Entrances.Include(q => q.CheckPoint).SingleOrDefault(m => m.Id == id);
+            ViewData["KPPName"] = applicationDbContext.CheckPoint.Name;
+            ViewData["CheckPointId"] = applicationDbContext.CheckPointId;
+            ViewData["EntranceIdData"] = id;
+            ViewData["EntranceId"] = new SelectList(_context.Entrances, "Id", "Id", id);
             return View();
         }
 
@@ -55,18 +62,30 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EntranceId,Scan")] qvEntranceDoc qvEntranceDoc)
+        public async Task<IActionResult> Create([Bind("Id,EntranceId")] qvEntranceDoc qvEntranceDoc, IFormFile Scan)
+
         {
             if (ModelState.IsValid)
             {
+                if (Scan != null)
+                {
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(Scan.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)Scan.Length);
+                    }
+                    // установка массива байтов
+                    qvEntranceDoc.Scan = imageData;
+                }
                 _context.Add(qvEntranceDoc);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvEntrances", new { id = qvEntranceDoc.EntranceId });
             }
             ViewData["EntranceId"] = new SelectList(_context.Entrances, "Id", "Id", qvEntranceDoc.EntranceId);
             return View(qvEntranceDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntranceDocs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -75,7 +94,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvEntranceDoc = await _context.EntranceDocs.SingleOrDefaultAsync(m => m.Id == id);
+            var qvEntranceDoc = await _context.EntranceDocs.Include(q => q.Entrance).ThenInclude(q=> q.CheckPoint).SingleOrDefaultAsync(m => m.Id == id);
             if (qvEntranceDoc == null)
             {
                 return NotFound();
@@ -89,7 +108,7 @@ namespace qVisitor.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EntranceId,Scan")] qvEntranceDoc qvEntranceDoc)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EntranceId")] qvEntranceDoc qvEntranceDoc, IFormFile Scan)
         {
             if (id != qvEntranceDoc.Id)
             {
@@ -100,6 +119,17 @@ namespace qVisitor.Controllers
             {
                 try
                 {
+                    if (Scan != null)
+                    {
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(Scan.OpenReadStream()))
+                        {
+                            imageData = binaryReader.ReadBytes((int)Scan.Length);
+                        }
+                        // установка массива байтов
+                        qvEntranceDoc.Scan = imageData;
+                    }
                     _context.Update(qvEntranceDoc);
                     await _context.SaveChangesAsync();
                 }
@@ -114,12 +144,12 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvEntrances", new { id = qvEntranceDoc.EntranceId });
             }
             ViewData["EntranceId"] = new SelectList(_context.Entrances, "Id", "Id", qvEntranceDoc.EntranceId);
             return View(qvEntranceDoc);
         }
-
+        [Authorize(Roles = "Охрана")]
         // GET: qvEntranceDocs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -128,7 +158,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvEntranceDoc = await _context.EntranceDocs.SingleOrDefaultAsync(m => m.Id == id);
+            var qvEntranceDoc = await _context.EntranceDocs.Include(q => q.Entrance).ThenInclude(q => q.CheckPoint).SingleOrDefaultAsync(m => m.Id == id);
             if (qvEntranceDoc == null)
             {
                 return NotFound();
@@ -145,7 +175,7 @@ namespace qVisitor.Controllers
             var qvEntranceDoc = await _context.EntranceDocs.SingleOrDefaultAsync(m => m.Id == id);
             _context.EntranceDocs.Remove(qvEntranceDoc);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvEntrances", new { id = qvEntranceDoc.EntranceId });
         }
 
         private bool qvEntranceDocExists(int id)

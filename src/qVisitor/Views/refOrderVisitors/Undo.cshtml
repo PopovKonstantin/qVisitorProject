@@ -1,0 +1,104 @@
+﻿@model qVisitor.Models.qvOrder
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_RegLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Отмена создания заявки</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>    
+<div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+    <a asp-controller="qvOrders" asp-action="Index" class="btn btn-default"> Список посетителей на заявку под номером @Model.Id</a>
+    <a asp-controller="refOrderVisitors" asp-action="Create" class="btn btn-default"> Добавить посетителя</a>
+    <a href="#" class="btn btn-default"> Отмена создания заявки</a>
+</div>
+    <!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="glyphicon glyphicon-list-alt"></i>
+                Удалить заявку
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <h3>Вы действительно хотите отменить создание заявки под номером @Model.Id?</h3>
+                <div>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Дата начала <br />действия заявки
+                        </dt>
+                        <dd>
+                            @Model.StartDate.ToString("dd.MM.yyyy")
+                        </dd>
+                        <dt>
+                            Время начала <br />действия заявки
+                        </dt>
+                        <dd>
+                            @Model.OpenTime.ToString("H:mm")
+                        </dd>
+                        <dt>
+                            Дата окончания <br />действия заявки
+                        </dt>
+                        <dd>
+                            @Model.EndDate.ToString("dd.MM.yyyy")
+                        </dd>
+                        <dt>
+                            Время окончания <br />действия заявки
+                        </dt>
+                        <dd>
+                            @Model.CloseTime.ToString("H:mm")
+                        </dd>
+                    </dl>
+
+                    <form asp-action="Undo">
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Да" class="btn" />
+                            <a style="color:#333;" asp-controller="refOrderVisitors" asp-action="Create" asp-route-reffid="@Model.Id">
+                                <button type="button" class="btn">Нет</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>    
+    <!-- /.row -->
+    <!-- /.row -->
+
+
+<!-- /.col-lg-6 -->
+<!-- jQuery -->
+<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="~/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="~/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="~/js/sb-admin-2.js"></script>
+
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+                responsive: true
+        });
+    });
+</script>

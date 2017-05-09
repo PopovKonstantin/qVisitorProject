@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,7 +19,7 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Системный администратор,Администратор")]
         // GET: qvCities
         public async Task<IActionResult> Index()
         {
@@ -26,6 +27,7 @@ namespace qVisitor.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
         [Route("Countries/Cities/{id}/Objects")]
+        [Authorize(Roles = "Системный администратор,Администратор")]
         // GET: qvCities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -40,9 +42,19 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
+            var cn = from c in _context.Countries
+                     where c.Id == qvCity.CountryID
+                     select c.Name;
+            ViewData["CountryName"] = cn.ToList()[0];
+            var citn = from c in _context.Cities
+                     where c.Id == id
+                     select c.Name;
+            ViewData["CityName"] = citn.ToList()[0];
+
             return View(qvCity);
         }
         [Route("Countries/Cities/Create")]
+        [Authorize(Roles = "Администратор")]
         // GET: qvCities/Create
         public IActionResult Create(int? reffid)
         {
@@ -51,6 +63,10 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
             ViewData["CountryID"] = new SelectList(_context.Countries, "Id", "Name", reffid);
+            var cn = from c in _context.Countries
+                     where c.Id == reffid
+                     select c.Name;
+            ViewData["CountryName"] = cn.ToList()[0];
             ViewData["Reff"] = reffid;
             return View();
         }
@@ -73,6 +89,7 @@ namespace qVisitor.Controllers
             return View(qvCity);
         }
         [Route("Countries/Cities/Edit/{id}")]
+        [Authorize(Roles = "Системный администратор")]
         // GET: qvCities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,6 +103,10 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
+            var cn = from c in _context.Countries
+                     where c.Id == qvCity.CountryID
+                     select c.Name;
+            ViewData["CountryName"] = cn.ToList()[0];
             ViewData["CountryID"] = new SelectList(_context.Countries, "Id", "Name", qvCity.CountryID);
             return View(qvCity);
         }
@@ -127,6 +148,7 @@ namespace qVisitor.Controllers
             return View(qvCity);
         }
         [Route("Countries/Cities/Delete/{id}")]
+        [Authorize(Roles = "Системный администратор")]
         // GET: qvCities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -140,6 +162,11 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
+
+            var cn = from c in _context.Countries
+                     where c.Id == qvCity.CountryID
+                     select c.Name;
+            ViewData["CountryName"] = cn.ToList()[0];
 
             return View(qvCity);
         }

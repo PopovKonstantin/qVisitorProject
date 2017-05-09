@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,13 +19,13 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrderTypes
         public async Task<IActionResult> Index()
         {
             return View(await _context.OrderTypes.ToListAsync());
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrderTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -63,7 +64,7 @@ namespace qVisitor.Controllers
             }
             return View(qvOrderType);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrderTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -114,7 +115,7 @@ namespace qVisitor.Controllers
             }
             return View(qvOrderType);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrderTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

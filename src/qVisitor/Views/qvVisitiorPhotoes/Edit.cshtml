@@ -12,17 +12,12 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId> Фотографии</a>
-        </li>
-        <li class="active">
-            Изменить фотографию
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvVisitors" asp-action="Index" class="btn btn-default">Посетители</a>
+        <a asp-controller="qvVisitors" asp-action="Details" asp-route-id=@Model.VisitorId class="btn btn-default"> Фотография </a>
+        <a href="#" class="btn btn-default"> Изменить фотографию</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -33,29 +28,29 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <form asp-action="Edit">
+                    <form asp-action="Edit" enctype="multipart/form-data">
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
-                            <div class="form-group">
-                                <label asp-for="Photo" class="col-md-2 control-label"></label>
+                            <div class="form-group hidden">
+                                <label asp-for="VisitorId" class="control-label col-md-2">Посетитель</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Photo" class="form-control" />
+                                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
+                                    <span asp-validation-for="VisitorId" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Photo" class="col-md-2 control-label">Фотография</label>
+                                <div class="col-md-10">
+                                    <input type="file" asp-for="Photo" class="form-control" />
                                     <span asp-validation-for="Photo" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="PhotoDate" class="col-md-2 control-label"></label>
+                                <label asp-for="PhotoDate" class="col-md-2 control-label">Дата</label>
                                 <div class="col-md-10">
-                                    <input asp-for="PhotoDate" class="form-control" />
+                                    <input type="date" asp-for="PhotoDate" class="form-control" />
                                     <span asp-validation-for="PhotoDate" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="VisitorId" class="control-label col-md-2"></label>
-                                <div class="col-md-10">
-                                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
-                                    <span asp-validation-for="VisitorId" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -78,56 +73,6 @@
 </div>
 
 
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
-
-
-
-
-
-<h2>Edit</h2>
-
-<form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>qvVisitiorPhoto</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-        <div class="form-group">
-            <label asp-for="Photo" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Photo" class="form-control" />
-                <span asp-validation-for="Photo" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="PhotoDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="PhotoDate" class="form-control" />
-                <span asp-validation-for="PhotoDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="VisitorId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
-                <span asp-validation-for="VisitorId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

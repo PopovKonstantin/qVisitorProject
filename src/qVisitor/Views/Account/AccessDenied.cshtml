@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Access Denied";
+    Layout = "~/Views/Shared/_RegLayout.cshtml";
+}
+
+
+<body style="background:url('../images/222.jpg') 100% 100% no-repeat; opacity:1">
+    <div>
+        <div style="position: relative;
+      margin: 200px auto;
+      width: 600px;
+      padding: 32px;
+      font-weight: 300;
+      color:#000;
+      opacity:1;">
+            <h2>@ViewData["Title"]</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <section>
+                        <h4>Нарушение полномочий пользователя</h4>
+                        <hr />
+                        <p>
+                            Внимание! Вызванное вами действие заблокировано для вашей учётной записи. Обратитесь к Системному администратору.
+                        </p>
+                        <div class="col-md-10">
+                            <a style="color:#333;" asp-controller="Home" asp-action="Index">
+                                <button type="button" class="btn">Назад</button>
+                            </a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

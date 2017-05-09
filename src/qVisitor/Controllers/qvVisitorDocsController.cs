@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +19,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorDocs
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.VisitorDocs.Include(q => q.Visitor);
-            return PartialView(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.ToListAsync());
         }
-        [Route("Visitors/Docs/Details/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorDocs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,11 +43,13 @@ namespace qVisitor.Controllers
 
             return View(qvVisitorDoc);
         }
-        [Route("Visitors/Docs/Create")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorDocs/Create
-        public IActionResult Create()
+        public IActionResult Create(int? reffid)
         {
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id");
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors select
+                                                            new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", reffid);
+            ViewData["Reff"] = reffid;
             return View();
         }
 
@@ -61,12 +64,14 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvVisitorDoc);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvVisitors", new { id = qvVisitorDoc.VisitorId });
             }
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitorDoc.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors
+                                                    select
+                               new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", qvVisitorDoc.VisitorId);
             return View(qvVisitorDoc);
         }
-        [Route("Visitors/Docs/Edit/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorDocs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -80,7 +85,9 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitorDoc.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors
+                                                    select
+                               new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", qvVisitorDoc.VisitorId);
             return View(qvVisitorDoc);
         }
 
@@ -114,12 +121,14 @@ namespace qVisitor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "qvVisitors", new { id = qvVisitorDoc.VisitorId });
             }
-            ViewData["VisitorId"] = new SelectList(_context.Visitors, "Id", "Id", qvVisitorDoc.VisitorId);
+            ViewData["VisitorId"] = new SelectList((from s in _context.Visitors
+                                                    select
+                               new { Id = s.Id, FullName = s.surname + " " + s.name + " " + s.patronymic }), "Id", "FullName", qvVisitorDoc.VisitorId);
             return View(qvVisitorDoc);
         }
-        [Route("Visitors/Docs/Delete/{id}")]
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitorDocs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -145,7 +154,7 @@ namespace qVisitor.Controllers
             var qvVisitorDoc = await _context.VisitorDocs.SingleOrDefaultAsync(m => m.Id == id);
             _context.VisitorDocs.Remove(qvVisitorDoc);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "qvVisitors", new { id = qvVisitorDoc.VisitorId });
         }
 
         private bool qvVisitorDocExists(int id)

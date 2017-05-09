@@ -1,48 +1,98 @@
-@model qVisitor.Models.qvVisitor
+﻿@model qVisitor.Models.qvVisitor
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>qvVisitor</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.birthdate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.birthdate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.patronymic)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.patronymic)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.surname)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.surname)
-        </dd>
-    </dl>
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"> @Html.DisplayFor(model => model.surname) @Html.DisplayFor(model => model.name) @Html.DisplayFor(model => model.patronymic) </h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvVisitors" asp-action="Index" class="btn btn-default">Посетители</a>
+        <a href="#" class="btn btn-default"> Информация о посетителе</a>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- /.panel-body -->
+            @{
+                Html.RenderPartial("~/Views/qvVisitiorPhotoes/Index.cshtml", Model.VisitorPhotoes);
+            }
+            <div class="well">
+                <a style="color:#333;" asp-controller="qvVisitiorPhotoes" asp-action="Create" asp-route-reffid="@Model.Id">
+                    <button type="button" class="btn">Добавить фотографию</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @{
+                Html.RenderPartial("~/Views/qvVisitorDocs/Index.cshtml", Model.VisitorDocs);
+            }
+            <div class="well">
+                <a style="color:#333;" asp-controller="qvVisitorDocs" asp-action="Create" asp-route-reffid="@Model.Id">
+                    <button type="button" class="btn">Добавить документ</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @{
+                Html.RenderPartial("~/Views/qvVisitorScans/Index.cshtml", Model.VisitorScans);
+            }
+            <div class="well">
+                <a style="color:#333;" asp-controller="qvVisitorScans" asp-action="Create" asp-route-reffid="@Model.Id">
+                    <button type="button" class="btn">Добавить результат сканирования</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @{
+                Html.RenderPartial("~/Views/refOrderVisitors/OrdersByVisitors.cshtml", Model.RefOrderVisitors);
+            }
+            <div class="well">
+                <a style="color:#333;" asp-controller="qvOrders" asp-action="Create">
+                    <button type="button" class="btn">Добавить заявку</button>
+                </a>
+            </div>
+        </div>
+    </div>
+<!-- /.row -->
+<!-- /.row -->
+<!-- /.col-lg-12 -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<!-- jQuery -->
+<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="~/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="~/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="~/js/sb-admin-2.js"></script>
+
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+    $(document).ready(function () {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+</script>

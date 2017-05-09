@@ -1,4 +1,4 @@
-@model qVisitor.Models.qvEntrancePhoto
+п»ї@model qVisitor.Models.qvEntrancePhoto
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,53 +8,52 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Изменить страну</h1>
+            <h1 class="page-header">РР·РјРµРЅРёС‚СЊ С„РѕС‚РѕРіСЂР°С„РёСЋ</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> Страны</a>
-        </li>
-        <li class="active">
-            Изменить страну
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">РљРџРџ</a>
+        <a href="#" class="btn btn-default">@Model.Entrance.CheckPoint.Name</a>
+        <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.Entrance.CheckPointId" class="btn btn-default"> РџРѕСЃРµС‰РµРЅРёСЏ </a>
+        <a href="#" class="btn btn-default">РџРѕСЃРµС‰РµРЅРёРµ в„–@Model.EntranceId</a>
+        <a asp-controller="qvEntrances" asp-action="Details" asp-route-id="@Model.EntranceId" class="btn btn-default"> РџРѕСЃРµС‰РµРЅРёСЏ </a>
+        <a href="#" class="btn btn-default">РР·РјРµРЅРёС‚СЊ С„РѕС‚РѕРіСЂР°С„РёСЋ</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Изменить название страны
+                    РР·РјРµРЅРёС‚СЊ С„РѕС‚РѕРіСЂР°С„РёСЋ
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <form asp-action="Edit">
+                    <form asp-action="Edit" enctype="multipart/form-data">
                         <div class="form-horizontal">
-                            <h4>qvEntrancePhoto</h4>
-                            <hr />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
-                                <label asp-for="EntranceId" class="control-label col-md-2"></label>
+                                <label asp-for="EntranceId" class="control-label col-md-2">РџРѕСЃРµС‰РµРЅРёРµ</label>
                                 <div class="col-md-10">
                                     <select asp-for="EntranceId" class="form-control" asp-items="ViewBag.EntranceId"></select>
                                     <span asp-validation-for="EntranceId" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Photo" class="col-md-2 control-label"></label>
+                                <label asp-for="Photo" class="col-md-2 control-label">Р¤РѕС‚РѕРіСЂР°С„РёСЏ</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Photo" class="form-control" />
+                                    <input type="file" asp-for="Photo" class="form-control" />
                                     <span asp-validation-for="Photo" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Сохранить" class="btn" />
-                                    <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
-                                        <button type="button" class="btn">Отменить</button>
+                                    <input type="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ" class="btn" />
+                                    <a style="color:#333;" asp-controller="qvEntrances" asp-action="Details" asp-route-id="@Model.EntranceId">
+                                        <button type="button" class="btn">РћС‚РјРµРЅРёС‚СЊ</button>
                                     </a>
                                 </div>
                             </div>
@@ -68,8 +67,6 @@
         </div>
     </div>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

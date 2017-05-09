@@ -16,7 +16,8 @@
     </div>
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
+        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">@ViewBag.CountryName</a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@ViewBag.CountryReff" class="btn btn-default">@ViewBag.CityName</a>
         <a asp-controller="qvCities" asp-action="Details" asp-route-id="@ViewBag.Reff" class="btn btn-default"> Объекты </a>
         <a href="#" class="btn btn-default">Изменить название объекта</a>
     </div>
@@ -33,7 +34,7 @@
                     <form asp-action="Create">
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
+                            <div class="form-group hidden">
                                 <label asp-for="CityId" class="col-md-2 control-label">Город</label>
                                 <div class="col-md-10">
                                     <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>

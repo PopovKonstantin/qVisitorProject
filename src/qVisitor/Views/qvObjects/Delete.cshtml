@@ -13,8 +13,9 @@
     </div>
     <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
         <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">Страны</a>
-        <a asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId" class="btn btn-default"> Объекты </a>
+        <a asp-controller="qvCountries" asp-action="Index" class="btn btn-default">@ViewBag.CountryName</a>
+        <a asp-controller="qvCountries" asp-action="Details" asp-route-id="@ViewBag.CountryReff" class="btn btn-default">@ViewBag.CityName</a>
+        <a asp-controller="qvCities" asp-action="Details" asp-route-id="@Model.CityId" class="btn btn-default"> >@ViewBag.ObjectName</a>
         <a href="#" class="btn btn-default">Удалить объект</a>
     </div>
     <!-- /.row -->

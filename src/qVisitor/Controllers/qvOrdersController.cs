@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -18,14 +19,14 @@ namespace qVisitor.Controllers
         {
             _context = context;    
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrders
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Orders.Include(q => q.OrderStatus).Include(q => q.OrderType);
+            var applicationDbContext = _context.Orders.Include(q => q.OrderStatus).Include(q => q.OrderType).Include(q => q.RefOrderVisitors).ThenInclude(q => q.Visitor);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -34,7 +35,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvOrder = await _context.Orders.SingleOrDefaultAsync(m => m.Id == id);
+            var qvOrder = await _context.Orders.Include(c => c.VisitorLuggages).Include(q => q.RefOrderVisitors).ThenInclude(q => q.Visitor).SingleOrDefaultAsync(m => m.Id == id);
             if (qvOrder == null)
             {
                 return NotFound();
@@ -42,12 +43,12 @@ namespace qVisitor.Controllers
 
             return View(qvOrder);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrders/Create
         public IActionResult Create()
         {
-            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Id");
-            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Id");
+            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Description");
+            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Description");
             return View();
         }
 
@@ -62,13 +63,13 @@ namespace qVisitor.Controllers
             {
                 _context.Add(qvOrder);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create","refOrderVisitors", new { reffid = qvOrder.Id});
             }
-            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Id", qvOrder.OrderStausid);
-            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Id", qvOrder.OrderTypeid);
+            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Description", qvOrder.OrderStausid);
+            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Description", qvOrder.OrderTypeid);
             return View(qvOrder);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -82,8 +83,8 @@ namespace qVisitor.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Id", qvOrder.OrderStausid);
-            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Id", qvOrder.OrderTypeid);
+            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Description", qvOrder.OrderStausid);
+            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Description", qvOrder.OrderTypeid);
             return View(qvOrder);
         }
 
@@ -119,11 +120,11 @@ namespace qVisitor.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Id", qvOrder.OrderStausid);
-            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Id", qvOrder.OrderTypeid);
+            ViewData["OrderStausid"] = new SelectList(_context.OrderStatuses, "Id", "Description", qvOrder.OrderStausid);
+            ViewData["OrderTypeid"] = new SelectList(_context.OrderTypes, "Id", "Description", qvOrder.OrderTypeid);
             return View(qvOrder);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvOrders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -8,62 +8,60 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Добавить страну</h1>
+            <h1 class="page-header">Добавить документ</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvVisitors" asp-action="Index"> Посетители</a>
-        </li>
-        <li class="active">
-            Добавит документ
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvVisitors" asp-action="Index" class="btn btn-default">Посетители</a>
+        <a asp-controller="qvVisitors" asp-action="Details" asp-route-id="@ViewBag.Reff" class="btn btn-default"> Документы </a>
+        <a href="#" class="btn btn-default"> Добавить документ</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    Добавит документ
+                    Добавить документ
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <form asp-action="Create">
                         <div class="form-horizontal">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="VisitorId" class="col-md-2 control-label">Номер посетителя</label>
+                            <div class="form-group hidden">
+                                <label asp-for="VisitorId" class="col-md-2 control-label">Посетитель</label>
                                 <div class="col-md-10">
-                                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
+                                    <select asp-for="VisitorId" id="src1" class="form-control" asp-items="ViewBag.VisitorId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label asp-for="ExpireDate" class="col-md-2 control-label"> Дата истечения срока актуальности данных</label>
+                                <label asp-for="ExpireDate" class="col-md-2 control-label">Дата истечения срока актуальности данных</label>
                                 <div class="col-md-10">
-                                    <input asp-for="ExpireDate" class="form-control" />
+                                    <input type="date" id="NextDate" readonly asp-for="ExpireDate" class="form-control" />
                                     <span asp-validation-for="ExpireDate" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label asp-for="IssueDate" class="col-md-2 control-label">Дата обновления данных</label>
                                 <div class="col-md-10">
-                                    <input asp-for="IssueDate" class="form-control" />
+                                    <input type="date" id="StartDate" readonly asp-for="IssueDate" class="form-control" />
                                     <span asp-validation-for="IssueDate" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Surname" class="col-md-2 control-label">Фамилия</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Surname" class="form-control" />
+                                    <input asp-for="Surname" readonly id="res"class="form-control" />
                                     <span asp-validation-for="Surname" class="text-danger" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Name" class="col-md-2 control-label">Имя</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Name" class="form-control" />
+                                    <input asp-for="Name" readonly id="res1"class="form-control" />
                                     <span asp-validation-for="Name" class="text-danger" />
                                 </div>
                             </div>
@@ -77,7 +75,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Создать" class="btn" />
-                                    <a style="color:#333;" asp-controller="Countries" asp-action="Index">
+                                    <a style="color:#333;" asp-controller="qvVisitors" asp-action="Details" asp-route-id="@ViewBag.Reff">
                                         <button type="button" class="btn">Отменить</button>
                                     </a>
                                 </div>
@@ -119,6 +117,7 @@
         $('#dataTables-example').DataTable({
                 responsive: true
         });
+
     });
 </script>
 
@@ -127,71 +126,32 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
+<script>
+    var e = document.getElementById('src1');
+    var i = e.options[e.selectedIndex].text;
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var mm2 = today.getMonth() + 2;//January is 0!
+    var yyyy = today.getFullYear();
 
+    if (dd < 10) {
+        dd = '0' + dd
+    }
 
+    if (mm < 10) {
+        mm = '0' + mm
+    }
 
+    if (mm2 < 10) {
+        mm2 = '0' + mm2
+    }
 
+    today = yyyy + '-' + mm + '-' + dd;
+    var today_next = yyyy + '-' + mm2 + '-' + dd;
+    document.getElementById('res').value = i.split(' ')[0];
+    document.getElementById('res1').value = i.split(' ')[1];
+    document.getElementById('StartDate').value = today;
+    document.getElementById('NextDate').value = today_next;
+</script>
 
-<h2>Create</h2>
-
-<form asp-action="Create">
-    <div class="form-horizontal">
-        <h4>qvVisitorDoc</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="ExpireDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ExpireDate" class="form-control" />
-                <span asp-validation-for="ExpireDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="IssueDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="IssueDate" class="form-control" />
-                <span asp-validation-for="IssueDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Number" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Surname" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="VisitorId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="VisitorId" class ="form-control" asp-items="ViewBag.VisitorId"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

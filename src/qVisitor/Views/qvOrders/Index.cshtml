@@ -1,4 +1,4 @@
-@model IEnumerable<qVisitor.Models.qvOrder>
+﻿@model IEnumerable<qVisitor.Models.qvOrder>
 
 @{
     ViewData["Title"] = "Index";
@@ -8,22 +8,22 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">������</h1>
+            <h1 class="page-header">Заявки</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li class="active">
-            ������
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a href="#" class="btn btn-default"> Заявки</a>
+    </div>
+
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    ������ �����
+                    Список заявок
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -32,18 +32,27 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.CloseTime)
+                                        Состояние заявки
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.EndDate)
+                                        Тип заявки
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.OpenTime)
+                                        Дата начала <br />действия заявки
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.StartDate)
+                                        Время начала <br />действия заявки
                                     </th>
-                                    <th></th>
+                                    <th>
+                                        Дата окончания <br />действия заявки
+                                    </th>
+                                    <th>
+                                        Время окончания <br />действия заявки
+                                    </th>
+                                    <th>
+                                        Посетители
+                                    </th>
+                                    <th>Действия</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,21 +60,33 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.CloseTime)
+                                            @item.OrderStatus.Description
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.EndDate)
+                                            @item.OrderType.Description
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.OpenTime)
+                                            @item.StartDate.Date.ToString("d")
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.StartDate)
+                                            @item.OpenTime.ToString("H:mm")
                                         </td>
                                         <td>
-                                            <a style="color:#333;" asp-controller="qvCountries" asp-action="Details" asp-route-id="@item.Id"><button class="btn">��������</button></a>
-                                            <a style="color:#333;" asp-controller="qvCountries" asp-action="Edit" asp-route-id="@item.Id"><button class="btn">��������</button></a>
-                                            <a style="color:#333;" asp-controller="qvCountries" asp-action="Delete" asp-route-id="@item.Id"><button class="btn">�������</button></a>
+                                            @item.EndDate.Date.ToString("d")
+                                        </td>
+                                        <td>
+                                            @item.CloseTime.ToString("H:mm")
+                                        </td>
+                                        <td>
+                                            @foreach (var v in item.RefOrderVisitors)
+                                            {
+                                                @String.Concat(v.Visitor.surname," ",v.Visitor.name," ",v.Visitor.patronymic) <br /><br />
+                                            }
+                                        </td>
+                                        <td>
+                                            <a style="color:#333;" asp-controller="qvOrders" asp-action="Details" asp-route-id="@item.Id"><button class="btn">Просмотр</button></a>
+                                            <a style="color:#333;" asp-controller="qvOrders" asp-action="Edit" asp-route-id="@item.Id"><button class="btn">Изменить</button></a>
+                                            <a style="color:#333;" asp-controller="qvOrders" asp-action="Delete" asp-route-id="@item.Id"><button class="btn">Удалить</button></a>
                                         </td>
                                     </tr>
                                 }
@@ -74,8 +95,8 @@
                     </div>
                     <!-- /.table-responsive -->
                     <div class="well">
-                        <a style="color:#333;" asp-controller="qvCountries" asp-action="Create">
-                            <button type="button" class="btn">�������� ������</button>
+                        <a style="color:#333;" asp-controller="qvOrders" asp-action="Create">
+                            <button type="button" class="btn">Добавить заявку</button>
                         </a>
                     </div>
                 </div>

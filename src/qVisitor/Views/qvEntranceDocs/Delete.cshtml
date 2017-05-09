@@ -1,4 +1,4 @@
-@model qVisitor.Models.qvEntranceDoc
+﻿@model qVisitor.Models.qvEntranceDoc
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,44 +8,48 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">������� ������</h1>
+            <h1 class="page-header">Удалить сканирование документа</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="qvCountries" asp-action="Index"> ������</a>
-        </li>
-        <li class="active">
-            ������� ������
-        </li>
-    </ol>
+    <div class="btn-group btn-breadcrumb" style="padding-bottom:20px;">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+        <a asp-controller="qvCheckPoints" asp-action="Index" class="btn btn-default">КПП</a>
+        <a href="#" class="btn btn-default">@Model.Entrance.CheckPoint.Name</a>
+        <a asp-controller="qvCheckPoints" asp-action="Details" asp-route-id="@Model.Entrance.CheckPointId" class="btn btn-default"> Посещения </a>
+        <a href="#" class="btn btn-default">Посещение №@Model.EntranceId</a>
+        <a asp-controller="qvEntrances" asp-action="Details" asp-route-id="@Model.EntranceId" class="btn btn-default"> Посещения </a>
+        <a href="#" class="btn btn-default">Удалить сканирование документа</a>
+    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="glyphicon glyphicon-list-alt"></i>
-                    ������� ������
+                    Удалить сканирование документа
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <h3>�� ������������� ������ ������� ������?</h3>
+                    <h3>Вы действительно хотите удалить результат сканирования?</h3>
                     <div>
                         <dl class="dl-horizontal">
                             <dt>
-                                @Html.DisplayNameFor(model => model.Scan)
+                                Сканирование
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Scan)
+                                @if (Model.Scan != null)
+                                {
+                                    <img style='width:240px; height:180px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Scan))" />
+                                }
                             </dd>
                         </dl>
 
                         <form asp-action="Delete">
                             <div class="form-actions no-color">
-                                <input type="submit" value="�������" class="btn" />
-                                <a style="color:#333;" asp-controller="qvCountries" asp-action="Index">
-                                    <button type="button" class="btn">��������</button>
+                                <input type="submit" value="Удалить" class="btn" />
+                                <a style="color:#333;" asp-controller="qvEntrances" asp-action="Details" asp-route-id="@Model.EntranceId">
+                                    <button type="button" class="btn">Отменить</button>
                                 </a>
                             </div>
                         </form>

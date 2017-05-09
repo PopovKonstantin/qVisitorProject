@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using qVisitor.Data;
 using qVisitor.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace qVisitor.Controllers
 {
@@ -16,15 +17,15 @@ namespace qVisitor.Controllers
 
         public qvVisitorsController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitors
         public async Task<IActionResult> Index()
         {
             return View(await _context.Visitors.ToListAsync());
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,7 +34,7 @@ namespace qVisitor.Controllers
                 return NotFound();
             }
 
-            var qvVisitor = await _context.Visitors.SingleOrDefaultAsync(m => m.Id == id);
+            var qvVisitor = await _context.Visitors.Include(vp => vp.VisitorPhotoes).Include(vd => vd.VisitorDocs).Include(vl => vl.VisitorLuggages).Include(vs => vs.VisitorScans).Include(vs => vs.RefOrderVisitors).SingleOrDefaultAsync(m => m.Id == id);
             if (qvVisitor == null)
             {
                 return NotFound();
@@ -41,7 +42,7 @@ namespace qVisitor.Controllers
 
             return View(qvVisitor);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitors/Create
         public IActionResult Create()
         {
@@ -64,6 +65,24 @@ namespace qVisitor.Controllers
             return View(qvVisitor);
         }
 
+        public IActionResult Create2()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Менеджер")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create2([Bind("Id,Gender,birthdate,name,patronymic,surname")] qvVisitor qvVisitor)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(qvVisitor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Create2");
+            }
+            return View(qvVisitor);
+        }
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -114,7 +133,7 @@ namespace qVisitor.Controllers
             }
             return View(qvVisitor);
         }
-
+        [Authorize(Roles = "Менеджер")]
         // GET: qvVisitors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

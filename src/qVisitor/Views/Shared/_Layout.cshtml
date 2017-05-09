@@ -246,18 +246,22 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Профиль пользователя</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-gear fa-fw"></i> Настройки</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Выйти</a>
-                        </li>
+                            <li>
+                                <a asp-controller="qvApplicationUsers" asp-action="Details2"><i class="fa fa-user fa-fw"></i> Профиль пользователя</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Manage" asp-action="Index"><i class="fa fa-gear fa-fw"></i> Настройки</a>
+                            </li>
+                            <li class="divider"></li>
+                        <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+                            <ul style="padding-left:10px;">
+                                <li>
+                                    <button type="submit" class="btn btn-link navbar-btn navbar-link" style="margin:0; color:#333"><i class="fa fa-sign-out fa-fw"></i> Выйти</button>
+                                </li>
+                            </ul>
+                        </form>
                     </ul>
-                    <!-- /.dropdown-user -->
+                        <!-- /.dropdown-user -->
                 </li>
                 <!-- /.dropdown -->
             </ul>
@@ -293,10 +297,10 @@
                             <a asp-controller="qvCheckPoints" asp-action="Index" style="color:#337ab7"> <i class="fa fa-table fa-fw"></i> Управление посещениями </a>
                         </li>
                         <li style="top:0; left: 0; width: 100%;">
-                            <a asp-controller="qvUserPassports" asp-action="Index" style="color:#337ab7"> <i class="fa fa-table fa-fw"></i> Управление пользователями</a>
+                            <a asp-controller="qvApplicationUsers" asp-action="Index" style="color:#337ab7"> <i class="fa fa-table fa-fw"></i> Управление пользователями</a>
                         </li>
                         <li style = "top:0; left: 0; width: 100%;">
-                            <a asp-controller="Home" asp-action="About" style="color:#337ab7"> <i class="fa fa-table fa-fw"></i> Личный кабинет</a>
+                            <a asp-controller="Manage" asp-action="Index" style="color:#337ab7"> <i class="fa fa-table fa-fw"></i> Личный кабинет</a>
                         </li>
                     </ul>
                 </div>
@@ -330,6 +334,24 @@
         </environment>
 
         @RenderSection("scripts", required: false)
+
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="~/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../vendor/raphael/raphael.min.js"></script>
+    <script src="../vendor/morrisjs/morris.min.js"></script>
+    
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+  
 
 </body>
 </html>
